@@ -97,7 +97,8 @@ def build(root):
     <h2>教程顺序</h2><ul>''' + ''.join(links) + '''</ul>
     <h2>数据与登录配置</h2><p>公开材料不包含微博数据集、采集结果或 Cookie。
     Pandas、绘图、用户行为和 DuckDB 教程的课堂数据由教师另行提供，放入
-    <code>tutorials/data/posts_two_weeks.parquet</code>。爬虫练习使用本地 HTML；
+    <code>tutorials/data/posts_two_weeks.parquet</code>。Pandas读写练习还需要同目录的
+    <code>posts_preview.csv</code>，由同一份数据取前8行保存。爬虫练习使用本地 HTML；
     学生登录 <a href="https://weibo.cn/">weibo.cn</a> 后使用自己的本地 Cookie 配置；采集只读前两页。</p>
 
     </main></body></html>'''

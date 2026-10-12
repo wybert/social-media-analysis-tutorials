@@ -18,7 +18,8 @@ conda activate user-behavior-class
 ```
 
 用VS Code打开整个仓库，选择该Conda内核。分析数据由教师另行提供，放在
-`tutorials/data/posts_two_weeks.parquet`；原始数据和分析输出不提交到公开仓库。
+`tutorials/data/posts_two_weeks.parquet`；Pandas读写练习的小文件 `posts_preview.csv` 也放在同一目录。
+原始数据、小CSV和分析输出不提交到公开仓库。
 
 爬虫使用 `tutorials/assets/weibo_crawler/test.html` 练习HTML，登录 https://weibo.cn/
 后按Notebook中的Network → Request Headers步骤获取自己的Cookie。
