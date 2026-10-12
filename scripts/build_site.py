@@ -11,11 +11,11 @@ import nbformat
 from nbconvert import HTMLExporter
 
 TITLES = {
-    '04_weibo_crawler_teaching_zh': ('微博爬虫', '登录与Cookie、请求、解析、前两页采集；三道短练习'),
-    '00_pandas_cookbook_zh': ('Pandas基础', '读表、筛选、分组、合并、文本、时间与SQL'),
-    '01_plotting_matplotlib_pandas_zh': ('Matplotlib与Pandas绘图', '常用图形、子图与交互式绘图介绍'),
-    '02_user_posting_behavior_zh': ('用户发帖与表达行为', '记录贡献、讨论内容、公开表达与城市汇总'),
-    '03_big_data_duckdb_zh': ('DuckDB与百万级记录分析', '直接查询Parquet、汇总后绘图、查询计划与多核'),
+    '01_weibo_crawler': ('Weibo Crawler', '登录与Cookie、请求、解析、前两页采集；三道短练习'),
+    '02_pandas_analysis': ('Pandas Analysis', '读表、筛选、分组、合并、文本、时间与SQL'),
+    '03_plotting': ('Plotting', '常用图形、子图与交互式绘图介绍'),
+    '04_user_behavior_analysis': ('User Behavior Analysis', '记录贡献、讨论内容、公开表达与城市汇总'),
+    '05_big_data_with_duckdb': ('Big Data with DuckDB', '直接查询Parquet、汇总后绘图、查询计划与多核'),
 }
 
 

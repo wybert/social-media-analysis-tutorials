@@ -4,11 +4,11 @@
 
 - [课程网页](https://wybert.github.io/social-media-analysis-tutorials/)
 - [HTML示例](https://wybert.github.io/social-media-analysis-tutorials/test.html)
-- [微博爬虫讲解版](tutorials/04_weibo_crawler_teaching_zh.ipynb)：先登录weibo.cn，配置自己的Cookie，固定只采前两页；三道短练习。
-- [Pandas基础](tutorials/00_pandas_cookbook_zh.ipynb)
-- [Matplotlib与Pandas绘图](tutorials/01_plotting_matplotlib_pandas_zh.ipynb)
-- [用户发帖与表达行为](tutorials/02_user_posting_behavior_zh.ipynb)
-- [DuckDB分析](tutorials/03_big_data_duckdb_zh.ipynb)
+- [Weibo Crawler](tutorials/01_weibo_crawler.ipynb)：先登录weibo.cn，配置自己的Cookie，固定只采前两页；三道短练习。
+- [Pandas Analysis](tutorials/02_pandas_analysis.ipynb)
+- [Plotting](tutorials/03_plotting.ipynb)
+- [User Behavior Analysis](tutorials/04_user_behavior_analysis.ipynb)
+- [Big Data with DuckDB](tutorials/05_big_data_with_duckdb.ipynb)
 
 ## 在本机运行
 

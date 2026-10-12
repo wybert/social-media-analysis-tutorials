@@ -10,6 +10,6 @@
 | `ppt_html_browser.png` | PPT第12页原浏览器截图，图像未改动 |
 | `2019_leijun_profile.png` | `references/weiboUserCrawler/Peek 2019-08-23 10-33.gif` 第72帧，直接导出，不含Cookie值 |
 
-三张图同时作为附件嵌在 `tutorials/04_weibo_crawler_teaching_zh.ipynb`，Notebook 显示图片不依赖外部图床。2019截图只说明当时的操作位置，不保证当前布局相同；截图中的互动数量未转为课程数据。
+三张图同时作为附件嵌在 `tutorials/01_weibo_crawler.ipynb`，Notebook 显示图片不依赖外部图床。2019截图只说明当时的操作位置，不保证当前布局相同；截图中的互动数量未转为课程数据。
 
 原源码和其他动图存在硬编码或可见的旧Cookie，不复制进教学版或学生答案。真实微博解析需使用本人获得的实际页面，当前目录不包含虚构微博HTML或帖子。
