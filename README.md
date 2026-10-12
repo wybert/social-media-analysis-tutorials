@@ -13,7 +13,7 @@
 ## 在本机运行
 
 ```sh
-conda env create -f requirements/environment.yml
+conda env create -f tutorials/requirements/environment.yml
 conda activate user-behavior-class
 ```
 

@@ -61,6 +61,9 @@ def build(root):
                     ignore=shutil.ignore_patterns('*.local.json'))
     (tutorials / 'data').mkdir()
     shutil.copy2(root / 'tutorials/data/README.md', tutorials / 'data/README.md')
+    (tutorials / 'requirements').mkdir()
+    for name in ('environment.yml', 'README.md'):
+        shutil.copy2(root / 'tutorials/requirements' / name, tutorials / 'requirements' / name)
     links = []
     for stem, (title, description) in TITLES.items():
         source = root / 'tutorials' / (stem + '.ipynb')
@@ -78,7 +81,7 @@ def build(root):
     with zipfile.ZipFile(downloads / 'tutorials.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
         for p in files:
             rel = p.relative_to(root).as_posix()
-            if rel.startswith('tutorials/') or rel in {'README.md', 'requirements/environment.yml'}:
+            if rel.startswith('tutorials/') or rel == 'README.md':
                 archive.write(p, rel)
     index = '''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
