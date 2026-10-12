@@ -1,0 +1,12 @@
+_site/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store
+.env
+*.cookie
+*.har
+tutorials/config/*.local.json
+tutorials/data/*
+!tutorials/data/README.md
+tutorials/output/
+data/output/
