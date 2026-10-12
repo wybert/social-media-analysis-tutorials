@@ -11,7 +11,7 @@ import nbformat
 from nbconvert import HTMLExporter
 
 TITLES = {
-    '01_weibo_crawler': ('Weibo Crawler', '登录与Cookie、请求、解析、前两页采集'),
+    '01_weibo_crawler': ('Weibo Crawler', '网页请求与HTML解析、Cookie与前两页采集'),
     '02_pandas_analysis': ('Pandas Analysis', '读表、筛选、分组、合并、文本、时间与SQL'),
     '03_plotting': ('Plotting', '常用图形、子图与交互式绘图介绍'),
     '04_user_behavior_analysis': ('User Behavior Analysis', '记录贡献、讨论内容、公开表达与城市汇总'),
