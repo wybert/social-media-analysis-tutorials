@@ -11,7 +11,7 @@ import nbformat
 from nbconvert import HTMLExporter
 
 TITLES = {
-    '01_weibo_crawler': ('Weibo Crawler', '登录与Cookie、请求、解析、前两页采集；三道短练习'),
+    '01_weibo_crawler': ('Weibo Crawler', '登录与Cookie、请求、解析、前两页采集'),
     '02_pandas_analysis': ('Pandas Analysis', '读表、筛选、分组、合并、文本、时间与SQL'),
     '03_plotting': ('Plotting', '常用图形、子图与交互式绘图介绍'),
     '04_user_behavior_analysis': ('User Behavior Analysis', '记录贡献、讨论内容、公开表达与城市汇总'),
@@ -89,18 +89,17 @@ def build(root):
     ul{padding-left:24px}li{padding:12px 0;border-bottom:1px solid #ddd}li a{font-size:22px;font-weight:600}
     li p{margin:4px 0;color:#536173}code{background:#e9edf0;padding:2px 5px}footer{margin-top:40px;color:#536173}
     </style></head><body><main><h1>社交媒体用户行为分析</h1>
-    <p>中文实操教程：从网页采集到表格分析、绘图与 DuckDB。网页可以直接阅读，
+    <p>学习网页采集、表格分析、绘图、用户行为分析与 DuckDB。网页可以直接阅读，
     代码请下载后在自己的 Conda 与 Jupyter 环境中运行。</p>
-    <p><a href="test.html">打开课堂 HTML 示例：爬虫测试1</a> ·
+    <p><a href="test.html">打开 HTML 示例：爬虫测试1</a> ·
     <a href="downloads/tutorials.zip">下载全部教程</a> ·
     <a href="https://github.com/wybert/social-media-analysis-tutorials">GitHub 仓库</a></p>
     <h2>教程顺序</h2><ul>''' + ''.join(links) + '''</ul>
     <h2>数据与登录配置</h2><p>公开材料不包含微博数据集、采集结果或 Cookie。
     Pandas、绘图、用户行为和 DuckDB 教程的课堂数据由教师另行提供，放入
-    <code>tutorials/data/posts_two_weeks.parquet</code>。爬虫教程先用本地 HTML 讲解，
+    <code>tutorials/data/posts_two_weeks.parquet</code>。爬虫练习使用本地 HTML；
     学生登录 <a href="https://weibo.cn/">weibo.cn</a> 后使用自己的本地 Cookie 配置；采集只读前两页。</p>
-    <footer>网页中的 Notebook 保留代码与说明，运行输出已清除。参考项目：
-    <a href="https://github.com/wybert/weiboUserCrawler">weiboUserCrawler</a>。</footer>
+
     </main></body></html>'''
     (out / 'index.html').write_text(index, encoding='utf-8')
     print(f'静态页面已生成：5本教程、HTML例子、无数据下载包；目录 {out.name}')

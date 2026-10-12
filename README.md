@@ -4,7 +4,7 @@
 
 - [课程网页](https://wybert.github.io/social-media-analysis-tutorials/)
 - [HTML示例](https://wybert.github.io/social-media-analysis-tutorials/test.html)
-- [Weibo Crawler](tutorials/01_weibo_crawler.ipynb)：先登录weibo.cn，配置自己的Cookie，固定只采前两页；三道短练习。
+- [Weibo Crawler](tutorials/01_weibo_crawler.ipynb)：先登录weibo.cn，配置自己的Cookie，固定只采前两页。
 - [Pandas Analysis](tutorials/02_pandas_analysis.ipynb)
 - [Plotting](tutorials/03_plotting.ipynb)
 - [User Behavior Analysis](tutorials/04_user_behavior_analysis.ipynb)
