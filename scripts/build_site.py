@@ -101,8 +101,7 @@ def build(root):
     </style></head><body><main><h1>社交媒体用户行为分析</h1>
     <p>学习网页采集、表格分析、绘图、用户行为分析与 DuckDB。网页可以直接阅读，
     代码请下载后在自己的 Conda 或 uv + venv 环境中运行。</p>
-    <p><a href="test.html">打开 HTML 示例：爬虫测试1</a> ·
-    <a href="downloads/tutorials.zip">下载全部教程</a> ·
+    <p><a href="downloads/tutorials.zip">下载全部教程</a> ·
     <a href="environment.html">环境与运行说明</a> ·
     <a href="https://github.com/wybert/social-media-analysis-tutorials">GitHub 仓库</a></p>
     <h2>教程顺序</h2><ul>''' + ''.join(links) + '''</ul>
