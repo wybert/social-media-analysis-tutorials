@@ -1,15 +1,17 @@
-# 爬虫教学网页与截图
+# 爬虫课程图片与 HTML
 
-`test.html` 根据 `slides/社交媒体用户大数据分析.pptx` 第12页的记事本源码截图恢复。标题、正文、链接文字、加粗标签和结构保留；语言标记由原截图的 `cn` 修正为 `zh-CN`，链接协议由 HTTP 改为 HTTPS。使用浏览器直接打开可查看页面，在 VS Code 中打开可查看源码。
-
-原线上地址为 `https://wybert.github.io/training/test.html`，2026-10-12 实际请求返回404。恢复后的HTML链接更新为课程站点 `https://wybert.github.io/social-media-analysis-tutorials/test.html`。本目录保留可本地打开的恢复件；PPT源码截图中的旧地址用于说明历史来源。HTML用于标签、属性与文本提取，不是新增微博数据集。
-
-| 文件 | 来源与用途 |
+| 文件 | 用途 |
 |---|---|
-| `ppt_html_source.png` | PPT第12页原源码截图，图像未改动 |
-| `ppt_html_browser.png` | PPT第12页原浏览器截图，图像未改动 |
-| `2019_leijun_profile.png` | `references/weiboUserCrawler/Peek 2019-08-23 10-33.gif` 第72帧，直接导出，不含Cookie值 |
+| `monthly_crawl_flow.png` | 登录、按月翻页、解析、去重和CSV保存的流程图 |
+| `leijun_profile_current.png` | 雷军公开用户页面，2026年10月13日截图 |
+| `leijun_date_filter_current.png` | 实际日期筛选表单，示例范围为2026年9月1日至30日 |
+| `leijun_month_result_current.png` | 上述月份的实际列表结果，观察正文、转发理由、互动栏和时间；截图中放大文字并限制大图片显示 |
+| `2019_leijun_profile.png` | 2019年的用户页和Network操作截图，只用于定位操作位置，不代表当前布局 |
+| `test.html` | 无需登录的公开教学网页，用于简短体验HTTP与HTML |
+| `ppt_html_source.png` / `ppt_html_browser.png` | HTML源码与浏览器显示的对照图片 |
 
-三张图同时作为附件嵌在 `tutorials/01_weibo_crawler.ipynb`，Notebook 显示图片不依赖外部图床。2019截图只说明当时的操作位置，不保证当前布局相同；截图中的互动数量未转为课程数据。
+教程中的主要图片以附件嵌入Notebook，可以随Notebook离线查看。截图不包含Cookie值。
+截图中的数字是当时页面的显示值，不作为课程分析数据；课堂结构示例也不是实际采集结果。
 
-原源码和其他动图存在硬编码或可见的旧Cookie，不复制进教学版或学生答案。真实微博解析需使用本人获得的实际页面，当前目录不包含虚构微博HTML或帖子。
+学生在自己的浏览器登录 `https://weibo.cn/`，通过 Network → Document请求 → Headers → Request Headers
+获取自己的Cookie，填写到本机Notebook。分享Notebook前清空真实Cookie和采集输出。

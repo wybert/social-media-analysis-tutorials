@@ -4,7 +4,7 @@
 
 - [课程网页](https://wybert.github.io/social-media-analysis-tutorials/)
 - [HTML示例](https://wybert.github.io/social-media-analysis-tutorials/test.html)
-- [Weibo Crawler](tutorials/01_weibo_crawler.ipynb)：先练习公开网页请求与HTML解析，再登录weibo.cn，配置自己的Cookie，采集用户前两页微博。
+- [Weibo Crawler](tutorials/01_weibo_crawler.ipynb)：登录weibo.cn，在本机代码格填写自己的Cookie，按月查询雷军微博、逐页解析、合并去重并保存CSV。
 - [Pandas Analysis](tutorials/02_pandas_analysis.ipynb)
 - [Plotting](tutorials/03_plotting.ipynb)
 - [User Behavior Analysis](tutorials/04_user_behavior_analysis.ipynb)
@@ -30,9 +30,9 @@ uv pip install --python .venv -r tutorials/requirements/requirements.txt
 原始数据、小CSV和分析输出不提交到公开仓库。
 
 爬虫使用 `tutorials/assets/weibo_crawler/test.html` 练习HTML，登录 https://weibo.cn/
-后按Notebook中的Network → Request Headers步骤获取自己的Cookie。
-公开配置模板为空；生成的 `tutorials/config/weibo_cookie.local.json` 仅在本机使用并被gitignore排除。
-采集默认关闭；开启后只访问第1、2页，页间30秒，异常即停止。
+后按Notebook中的Network → Request Headers步骤获取自己的Cookie，只填写在本机Notebook中。
+公开Notebook的Cookie为空，分享或提交前务必清空真实会话并移除采集输出。
+月份循环默认关闭；开启后按月份翻页，每次新请求间隔30秒，异常即停止。
 
 ## 网页发布
 

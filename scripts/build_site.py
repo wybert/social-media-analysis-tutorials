@@ -1,5 +1,6 @@
 """只从无输出的公开Notebook构建静态课程网页，绝不执行数据分析或爬虫。"""
 from pathlib import Path
+import ast
 from html import escape
 import json
 import re
@@ -11,7 +12,7 @@ import nbformat
 from nbconvert import HTMLExporter
 
 TITLES = {
-    '01_weibo_crawler': ('Weibo Crawler', '网页请求与HTML解析、Cookie与前两页采集'),
+    '01_weibo_crawler': ('Weibo Crawler', '按月份搜集雷军微博：请求、解析、翻页、去重与CSV保存'),
     '02_pandas_analysis': ('Pandas Analysis', '读表、筛选、分组、合并、文本、时间与SQL'),
     '03_plotting': ('Plotting', '常用图形、子图与交互式绘图介绍'),
     '04_user_behavior_analysis': ('User Behavior Analysis', '记录贡献、讨论内容、公开表达与城市汇总'),
@@ -38,6 +39,11 @@ def audit(root):
             notebook = nbformat.read(p, as_version=4)
             assert all(not c.get('outputs') and c.get('execution_count') is None
                        for c in notebook.cells if c.cell_type == 'code'), rel
+            for cell in notebook.cells:
+                if cell.cell_type == 'code' and cell.source.strip():
+                    for node in ast.walk(ast.parse(cell.source)):
+                        if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'COOKIE' for t in node.targets):
+                            assert isinstance(node.value, ast.Constant) and node.value.value == '', f'公开Notebook的COOKIE必须为空：{rel}'
         if p.suffix in {'.json', '.ipynb', '.md', '.py', '.html', '.yml'}:
             text = p.read_text(encoding='utf-8')
             assert not re.search(r'(?:_T_WM|SCF|SUB|SUBP|SSOLoginState|ALF)\s*=\s*[^;\s"<>]{8,}', text), rel
@@ -57,8 +63,6 @@ def build(root):
     shutil.copytree(root / 'tutorials/assets', tutorials / 'assets')
     shutil.copy2(root / 'tutorials/assets/weibo_crawler/test.html', out / 'test.html')
     shutil.copy2(root / 'tutorials/assets/weibo_crawler/test.html', tutorials / 'test.html')
-    shutil.copytree(root / 'tutorials/config', tutorials / 'config',
-                    ignore=shutil.ignore_patterns('*.local.json'))
     (tutorials / 'data').mkdir()
     shutil.copy2(root / 'tutorials/data/README.md', tutorials / 'data/README.md')
     (tutorials / 'requirements').mkdir()
@@ -109,7 +113,8 @@ def build(root):
     Pandas、绘图、用户行为和 DuckDB 教程的课堂数据由教师另行提供，放入
     <code>tutorials/data/posts_two_weeks.parquet</code>。Pandas读写练习还需要同目录的
     <code>posts_preview.csv</code>，由同一份数据取前8行保存。爬虫练习使用本地 HTML；
-    学生登录 <a href="https://weibo.cn/">weibo.cn</a> 后使用自己的本地 Cookie 配置；采集只读前两页。</p>
+    学生登录 <a href="https://weibo.cn/">weibo.cn</a> 后在本机Notebook中填写自己的 Cookie；
+    先检查一个月份，再按月翻页搜集当前可见的雷军微博。</p>
 
     </main></body></html>'''
     (out / 'index.html').write_text(index, encoding='utf-8')

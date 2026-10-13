@@ -43,7 +43,7 @@ uv pip install --python .venv -r tutorials/requirements/requirements.txt
 - 用 `Shift+Enter` 运行当前代码格；首次使用或重启内核后从初始化开始按顺序执行。
 - 看到 `NameError` 时先检查前面的定义格是否已运行；看到 `ModuleNotFoundError` 时先核对所选内核和依赖安装位置。
 - 修改代码后重跑相关单元格与后续依赖格。先在练习空白格作答，再展开参考答案。
-- 微博采集默认关闭，按爬虫教程登录 `weibo.cn` 并填写自己的本地 Cookie 配置。
+- 微博月份循环默认关闭；按爬虫教程登录 `weibo.cn`，将自己的 Cookie 填到本机代码格，先检查一页再启动循环。分享 Notebook 前清空真实 Cookie 和采集输出。
 
 运行另外两本 `student_notebooks` 或 `full_notebooks` 时，需要教师提供的完整课程目录，包括 `scripts`、`data/map_assets` 和 `data/geography`。五本 `tutorials` 可使用公开下载包与另行提供的数据运行。
 
