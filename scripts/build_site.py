@@ -62,8 +62,15 @@ def build(root):
     (tutorials / 'data').mkdir()
     shutil.copy2(root / 'tutorials/data/README.md', tutorials / 'data/README.md')
     (tutorials / 'requirements').mkdir()
-    for name in ('environment.yml', 'README.md'):
+    for name in ('environment.yml', 'requirements.txt', 'README.md'):
         shutil.copy2(root / 'tutorials/requirements' / name, tutorials / 'requirements' / name)
+    environment_page = nbformat.v4.new_notebook(cells=[nbformat.v4.new_markdown_cell(
+        (root / 'tutorials/requirements/README.md').read_text(encoding='utf-8'))])
+    environment_html, _ = HTMLExporter(template_name='lab').from_notebook_node(environment_page)
+    environment_html = re.sub(r'(<body\b[^>]*>)',
+                              r'\1<nav style="padding:16px"><a href="index.html">返回课程首页</a></nav>',
+                              environment_html, count=1)
+    (out / 'environment.html').write_text(environment_html, encoding='utf-8')
     links = []
     for stem, (title, description) in TITLES.items():
         source = root / 'tutorials' / (stem + '.ipynb')
@@ -93,9 +100,10 @@ def build(root):
     li p{margin:4px 0;color:#536173}code{background:#e9edf0;padding:2px 5px}footer{margin-top:40px;color:#536173}
     </style></head><body><main><h1>社交媒体用户行为分析</h1>
     <p>学习网页采集、表格分析、绘图、用户行为分析与 DuckDB。网页可以直接阅读，
-    代码请下载后在自己的 Conda 与 Jupyter 环境中运行。</p>
+    代码请下载后在自己的 Conda 或 uv + venv 环境中运行。</p>
     <p><a href="test.html">打开 HTML 示例：爬虫测试1</a> ·
     <a href="downloads/tutorials.zip">下载全部教程</a> ·
+    <a href="environment.html">环境与运行说明</a> ·
     <a href="https://github.com/wybert/social-media-analysis-tutorials">GitHub 仓库</a></p>
     <h2>教程顺序</h2><ul>''' + ''.join(links) + '''</ul>
     <h2>数据与登录配置</h2><p>公开材料不包含微博数据集、采集结果或 Cookie。
@@ -110,6 +118,6 @@ def build(root):
 
 
 if __name__ == '__main__':
-    assert (Path(sys.prefix) / 'conda-meta').exists(), '请使用Conda环境运行'
+    assert (Path(sys.prefix) / 'conda-meta').exists() or sys.prefix != sys.base_prefix, '请选择安装课程依赖的 Conda 或 venv 内核'
     root = Path(__file__).resolve().parents[1]
     build(root)

@@ -17,7 +17,15 @@ conda env create -f tutorials/requirements/environment.yml
 conda activate user-behavior-class
 ```
 
-用VS Code打开整个仓库，选择该Conda内核。分析数据由教师另行提供，放在
+也可使用 uv + venv：
+
+```sh
+uv venv --python 3.11 .venv
+uv pip install --python .venv -r tutorials/requirements/requirements.txt
+```
+
+用VS Code打开整个仓库，选择课程Conda环境或项目 `.venv` 内核。
+详细步骤见[环境与运行说明](tutorials/requirements/README.md)。分析数据由教师另行提供，放在
 `tutorials/data/posts_two_weeks.parquet`；Pandas读写练习的小文件 `posts_preview.csv` 也放在同一目录。
 原始数据、小CSV和分析输出不提交到公开仓库。
 

@@ -10,3 +10,5 @@ tutorials/data/*
 !tutorials/data/README.md
 tutorials/output/
 data/output/
+
+.venv/

@@ -1,18 +1,54 @@
-# Python 环境
+# 环境与运行准备
 
-在 VS Code 打开整个课程目录，然后在项目根目录的终端运行：
+准备 Python 3.11、VS Code，以及 VS Code 的 Python 和 Jupyter 扩展。Conda 与 uv + venv 两种方式任选一种。下面的命令都从项目根目录运行；如果终端位于 `tutorials`，将配置路径中的 `tutorials/` 去掉。
+
+## 1. Conda
 
 ```sh
 conda env create -f tutorials/requirements/environment.yml
 conda activate user-behavior-class
 ```
 
-如果终端已经位于 `tutorials` 目录，配置文件路径改为 `requirements/environment.yml`。
+打开 Notebook，在右上角内核选择器中选择 `user-behavior-class`。配置中的 `PYTHONNOUSERSITE=1` 避免读取本机用户目录中另行安装的同名包。
 
-打开 Notebook，点击右上角的内核选择器，选择 `user-behavior-class` 环境。VS Code 需要安装 Python 和 Jupyter 扩展；安装 Conda 包不会自动安装这些编辑器扩展。
+## 2. uv + venv
 
-环境包含网页请求与解析、Pandas、Matplotlib、Plotly、DuckDB、空间分析示例和 Jupyter 所需的依赖。hvPlot 和 Altair 是绘图库拓展介绍，未列入默认环境。
+先按 [uv 官方安装说明](https://docs.astral.sh/uv/getting-started/installation/)安装 uv，再运行：
 
-配置中的 `PYTHONNOUSERSITE=1` 让环境不读取本机用户目录中另行安装的 Python 包，避免同名包互相干扰。
+```sh
+uv venv --python 3.11 .venv
+uv pip install --python .venv -r tutorials/requirements/requirements.txt
+```
 
-课堂数据由教师另行提供，放入 `tutorials/data/`。微博采集需要填写自己的登录配置，默认关闭。
+`--python .venv` 将依赖安装到指定虚拟环境，不受终端中其他已激活环境影响。在 VS Code 的内核选择器中选择“Python Environments”，再选择项目的 `.venv`：macOS/Linux 为 `.venv/bin/python`，Windows 为 `.venv\Scripts\python.exe`。依赖文件已包含 `ipykernel`。
+
+如果使用 JupyterLab，可直接用虚拟环境的解释器启动：
+
+```sh
+# macOS / Linux
+.venv/bin/python -m jupyterlab
+```
+
+```powershell
+# Windows PowerShell
+.\.venv\Scripts\python.exe -m jupyterlab
+```
+
+已有其他 venv 时，也可用 `uv pip install --python 虚拟环境目录 -r tutorials/requirements/requirements.txt` 安装同一套依赖。
+
+## 3. 数据与 Notebook 操作
+
+- 在 VS Code 打开整个课程目录，保留 `tutorials` 及其 `assets`、`config`、`data` 子目录。
+- 教师提供的 `posts_two_weeks.parquet` 与 `posts_preview.csv` 放入 `tutorials/data/`。公开下载包不含数据。
+- 用 `Shift+Enter` 运行当前代码格；首次使用或重启内核后从初始化开始按顺序执行。
+- 看到 `NameError` 时先检查前面的定义格是否已运行；看到 `ModuleNotFoundError` 时先核对所选内核和依赖安装位置。
+- 修改代码后重跑相关单元格与后续依赖格。先在练习空白格作答，再展开参考答案。
+- 微博采集默认关闭，按爬虫教程登录 `weibo.cn` 并填写自己的本地 Cookie 配置。
+
+运行另外两本 `student_notebooks` 或 `full_notebooks` 时，需要教师提供的完整课程目录，包括 `scripts`、`data/map_assets` 和 `data/geography`。五本 `tutorials` 可使用公开下载包与另行提供的数据运行。
+
+## 4. 使用范围
+
+环境包含 Pandas、NumPy、Matplotlib、Plotly、DuckDB、Requests、Beautiful Soup、PyArrow 和 Jupyter，以及完整课程使用的统计与地图依赖。hvPlot、Altair 是拓展介绍，需要使用时再安装。
+
+当前课程网页供阅读和下载，代码在本地 Python 环境执行。JupyterLite 使用浏览器内核，文件、网络请求及运行资源与本地环境不同；现有教程不作为可直接运行的 JupyterLite 版本提供。
