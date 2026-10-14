@@ -37,8 +37,8 @@ uv pip install --python .venv -r tutorials/requirements/requirements.txt
 
 ## 网页发布
 
-GitHub Actions在Conda环境中将无输出Notebook转换为静态HTML，**不会执行Notebook、读取数据或抓微博**。
-发布前检查数据文件、私有Cookie、匿名记录ID和运行输出；检测到这些内容会中止构建。
+GitHub Actions在Conda环境中将经过校验的Notebook转换为静态HTML，**不会执行Notebook、读取数据或抓微博**。
+发布前检查数据文件、私有Cookie、匿名记录ID和分析、采集输出；仅允许与固定HTML文件完全一致的步骤教学界面。
 网站入口为 `index.html`，课堂示例可直接访问 `test.html`。
 
 参考原项目：[weiboUserCrawler](https://github.com/wybert/weiboUserCrawler)。历史截图用于讲解操作位置，不能当作当前采集结果。

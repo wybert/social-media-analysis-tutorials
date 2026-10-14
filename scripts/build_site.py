@@ -30,7 +30,7 @@ display(HTML(filename=str(tab_file)))'''
 
 
 def audit(root):
-    """未来重新部署时也拒绝数据文件、私有配置和Notebook运行输出。"""
+    """拒绝数据、私有配置和分析输出；仅允许完全匹配固定HTML文件的教学界面。"""
     if (root / '.git').is_dir():
         result = subprocess.run(['git', 'ls-files'], cwd=root, check=True, capture_output=True, text=True)
         files = [root / name for name in result.stdout.splitlines()]
