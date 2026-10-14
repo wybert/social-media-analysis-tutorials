@@ -8,6 +8,7 @@
 | `leijun_month_result_current.png` | 上述月份的实际列表结果，观察正文、转发理由、互动栏和时间；截图中放大文字并限制大图片显示 |
 | `cookie_steps_masked.gif` | 六步获取 Cookie 的操作示意：登录、打开 Network、刷新并选择请求、查看请求标头、复制完整值、粘贴到 Notebook；约30秒，循环播放 |
 | `cookie_headers_masked.png` | Cookie 复制位置的静态示意，可停留查看 |
+| `cookie_step_01_masked.png` 至 `cookie_step_06_masked.png` | 对应六个可点击展开的操作步骤；图片嵌入 Notebook，无需运行代码即可查看 |
 | `2019_leijun_profile.png` | 2019年的用户页和Network操作截图，只用于定位操作位置，不代表当前布局 |
 | `test.html` | 无需登录的公开教学网页，用于简短体验HTTP与HTML |
 | `ppt_html_source.png` / `ppt_html_browser.png` | HTML源码与浏览器显示的对照图片 |
