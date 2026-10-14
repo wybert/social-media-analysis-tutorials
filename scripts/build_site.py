@@ -1,4 +1,4 @@
-"""只从无输出的公开Notebook构建静态课程网页，绝不执行数据分析或爬虫。"""
+"""构建公开课程网页，仅保留经校验的固定教学界面，不执行数据分析或爬虫。"""
 from pathlib import Path
 import ast
 from html import escape
@@ -19,6 +19,15 @@ TITLES = {
     '05_big_data_with_duckdb': ('Big Data with DuckDB', '直接查询Parquet、汇总后绘图、查询计划与多核'),
 }
 
+COOKIE_TABS_CODE = '''# 显示六步操作标签页；不发送网页请求，也不读取 Cookie。
+from pathlib import Path
+from IPython.display import HTML, display
+# 兼容从 tutorials 目录或项目根目录打开 Notebook。
+tab_file = Path('assets/weibo_crawler/cookie_tabs.html')
+if not tab_file.is_file():
+    tab_file = Path('tutorials/assets/weibo_crawler/cookie_tabs.html')
+display(HTML(filename=str(tab_file)))'''
+
 
 def audit(root):
     """未来重新部署时也拒绝数据文件、私有配置和Notebook运行输出。"""
@@ -37,9 +46,19 @@ def audit(root):
             raise ValueError(f'数据目录只允许保留说明：{rel}')
         if p.suffix == '.ipynb':
             notebook = nbformat.read(p, as_version=4)
-            assert all(not c.get('outputs') and c.get('execution_count') is None
-                       for c in notebook.cells if c.cell_type == 'code'), rel
             for cell in notebook.cells:
+                if cell.cell_type == 'code':
+                    assert cell.get('execution_count') is None, rel
+                    if cell.metadata.get('course_ui') == 'cookie_tabs':
+                        assert p.name == '01_weibo_crawler.ipynb', rel
+                        assert ast.dump(ast.parse(cell.source)) == ast.dump(ast.parse(COOKIE_TABS_CODE)), rel
+                        expected = (root / 'tutorials/assets/weibo_crawler/cookie_tabs.html').read_text(encoding='utf-8')
+                        outputs = cell.get('outputs', [])
+                        assert len(outputs) == 1 and outputs[0].output_type == 'display_data', rel
+                        assert dict(outputs[0].data) == {'text/html': expected,
+                            'text/plain': '获取Cookie的六步标签页（会话值已遮挡）'}, rel
+                    else:
+                        assert not cell.get('outputs'), rel
                 if cell.cell_type == 'code' and cell.source.strip():
                     for node in ast.walk(ast.parse(cell.source)):
                         if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'COOKIE' for t in node.targets):

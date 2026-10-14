@@ -1,6 +1,7 @@
 # 社交媒体用户行为分析：中文实操教程
 
-公开教程材料，不包含微博数据集、学生/教师Cookie或Notebook运行输出。
+公开教程材料，不包含微博数据集、学生/教师Cookie或分析、采集的运行输出。
+仅保留内容经过校验的Cookie步骤标签页教学界面。
 
 - [课程网页](https://wybert.github.io/social-media-analysis-tutorials/)
 - [HTML示例](https://wybert.github.io/social-media-analysis-tutorials/test.html)
