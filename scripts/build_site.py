@@ -70,6 +70,24 @@ def audit(root):
     return files
 
 
+def preserve_mermaid_source(html, notebook):
+    """转义完整Mermaid源码，防止导出时将节点中的<br/>当成HTML标签。"""
+    diagrams = []
+    for cell in notebook.cells:
+        if cell.cell_type == 'markdown':
+            diagrams.extend(re.findall(r'^```mermaid[^\S\n]*\n(.*?)^```[^\S\n]*$',
+                                       cell.source, flags=re.M | re.S))
+    if not diagrams:
+        return html
+    sources = iter(diagrams)
+    def replace(match):
+        return match[1] + '\n' + escape(next(sources), quote=False) + match[2]
+    html, count = re.subn(r'(<pre\b[^>]*\bclass="mermaid"[^>]*>).*?(</pre>)',
+                         replace, html, flags=re.S)
+    assert count == len(diagrams), 'Mermaid导出数量与Notebook源码不一致'
+    return html
+
+
 def build(root):
     files = audit(root)
     out = root / '_site'
@@ -99,6 +117,7 @@ def build(root):
         source = root / 'tutorials' / (stem + '.ipynb')
         notebook = nbformat.read(source, as_version=4)
         body, _ = HTMLExporter(template_name='lab', embed_images=True).from_notebook_node(notebook)
+        body = preserve_mermaid_source(body, notebook)
         navigation = ('<nav style="padding:16px;font:16px sans-serif;border-bottom:1px solid #ddd">'
                       '<a href="../index.html">返回课程首页</a> · '
                       f'<a href="{stem}.ipynb" download>下载本页Notebook</a></nav>')

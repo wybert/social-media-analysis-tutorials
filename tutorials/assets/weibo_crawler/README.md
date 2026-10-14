@@ -2,7 +2,7 @@
 
 | 文件 | 用途 |
 |---|---|
-| `monthly_crawl_flow.png` | 登录、按月翻页、解析、去重和CSV保存的流程图 |
+| `monthly_crawl_flow.png` | 备用静态流程图；Notebook正文使用横向Mermaid流程图 |
 | `leijun_profile_current.png` | 雷军公开用户页面，2026年10月13日截图 |
 | `leijun_date_filter_current.png` | 实际日期筛选表单，示例范围为2026年9月1日至30日 |
 | `leijun_month_result_current.png` | 上述月份的实际列表结果，观察正文、转发理由、互动栏和时间；截图中放大文字并限制大图片显示 |
