@@ -1,6 +1,7 @@
 """构建公开课程网页，仅保留经校验的固定教学界面，不执行数据分析或爬虫。"""
 from pathlib import Path
 import ast
+import hashlib
 from html import escape
 import json
 import re
@@ -35,6 +36,28 @@ if not posts.empty:
 else:
     print('尚无采集结果；填写 Cookie 后运行请求、解析、翻页和保存单元。')'''
 
+# 经本次课程更新审核的已有教学输出；源码与输出必须同时完全匹配。
+CRAWLER_SAVED_OUTPUTS = {
+    "919edc9b": "21722c81bbaad4b8ada35bb7219984b94bd99bcaf7ac0fd88b2fcf4e33e3d70c",
+    "1d0950a3": "94282215923bd101108642bd83be1dcbb1bfa17a6a50a6cfb5f860f029ecd644",
+    "583e1e34": "c33b7de3208d08d83436d3712b6396dfaf49ed1ea77c4a592ccf710aa86bf227",
+    "f678d4c7": "86149b5acd0be5bd32a5aa7154931248f843dfe2db62877ab692626a81ef1da1",
+    "29c35f25": "adfeaec2b77c2f46fbf3d5cd3eb073dd8b2a793d0d725de81d206be72bdb9cd7",
+    "2eca888f": "b00bfae8d0320d0be67670b8f844d5baee550a4ae508aad5fea1d86ff02d5afb",
+    "3b2d272b": "971424908215b16baab36502d536a456926b6c7d942bb10992dc836a5a6bab62",
+    "247e0794": "1ce81093f98667148626378265d91dab6ec042fe5bbe3f3e2fad145033134d36",
+    "f3d75216": "b0b1f2dbe1cc23c2eee6a0809018cde00bbdb36635b3b59b33448703fd3b1ca5"
+}
+
+
+def approved_crawler_output(cell):
+    expected = CRAWLER_SAVED_OUTPUTS.get(cell.get('id'))
+    if not expected:
+        return False
+    payload = json.dumps({'source': cell.source, 'outputs': cell.get('outputs', [])},
+                         ensure_ascii=False, sort_keys=True)
+    return hashlib.sha256(payload.encode()).hexdigest() == expected
+
 
 def audit(root):
     """拒绝数据、私有配置和分析输出；仅允许完全匹配固定HTML文件的教学界面。"""
@@ -68,8 +91,10 @@ def audit(root):
                         expected = (root / 'tutorials/assets/weibo_crawler/cookie_tabs.html').read_text(encoding='utf-8')
                         outputs = cell.get('outputs', [])
                         assert len(outputs) == 1 and outputs[0].output_type == 'display_data', rel
-                        assert dict(outputs[0].data) == {'text/html': expected,
-                            'text/plain': '获取Cookie的六步标签页（会话值已遮挡）'}, rel
+                        assert set(outputs[0].data) == {'text/html', 'text/plain'}, rel
+                        assert outputs[0].data['text/html'] == expected, rel
+                        assert outputs[0].data['text/plain'] in {
+                            '获取Cookie的六步标签页（会话值已遮挡）', '<IPython.core.display.HTML object>'}, rel
                     elif cell.metadata.get('course_ui') == 'crawl_result_example':
                         assert p.name == '01_weibo_crawler.ipynb', rel
                         assert ast.dump(ast.parse(cell.source)) == ast.dump(ast.parse(CRAWL_RESULT_CODE)), rel
@@ -78,6 +103,8 @@ def audit(root):
                         assert len(outputs) == 1 and outputs[0].output_type == 'display_data', rel
                         assert dict(outputs[0].data) == {'text/html': expected,
                             'text/plain': '雷军微博前三页采集示例：30条（2026-10-14）'}, rel
+                    elif p.name == '01_weibo_crawler.ipynb' and approved_crawler_output(cell):
+                        pass  # 已审核的本课示范输出，不允许任意新输出。
                     else:
                         assert not cell.get('outputs'), rel
                 if cell.cell_type == 'code' and cell.source.strip():
@@ -171,7 +198,7 @@ def build(root):
     <a href="environment.html">环境与运行说明</a> ·
     <a href="https://github.com/wybert/social-media-analysis-tutorials">GitHub 仓库</a></p>
     <h2>教程顺序</h2><ul>''' + ''.join(links) + '''</ul>
-    <h2>数据与登录配置</h2><p>爬虫教程保留雷军公开微博前3页的30条课堂示例，便于对照字段与采集结果；
+    <h2>数据与登录配置</h2><p>爬虫教程保留雷军公开微博前3页的请求、解析与采集示范输出，便于对照操作和结果；
     公开材料不包含课堂原始微博数据集、个人 Cookie 或 .env 登录配置。
     Pandas、绘图、用户行为和 DuckDB 教程的课堂数据由教师另行提供，放入
     <code>tutorials/data/posts_two_weeks.parquet</code>。Pandas读写练习还需要同目录的

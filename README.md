@@ -1,7 +1,7 @@
 # 社交媒体用户行为分析：中文实操教程
 
 公开教程材料，不包含课堂原始微博数据集、学生/教师Cookie或个人采集输出。
-保留Cookie步骤标签页和雷军公开微博前3页的30条课堂展示样本。
+保留Cookie步骤标签页，以及雷军公开微博前3页的请求、解析与采集示范输出。
 
 - [课程网页](https://wybert.github.io/social-media-analysis-tutorials/)
 - [HTML示例](https://wybert.github.io/social-media-analysis-tutorials/test.html)
@@ -39,7 +39,7 @@ uv pip install --python .venv -r tutorials/requirements/requirements.txt
 ## 网页发布
 
 GitHub Actions在Conda环境中将经过校验的Notebook转换为静态HTML，**不会执行Notebook、读取数据或抓微博**。
-发布前检查数据文件、私有Cookie、匿名记录ID和个人采集输出；只保留完全匹配固定文件的步骤界面与30条雷军展示样本。
+发布前检查数据文件、私有Cookie、匿名记录ID和个人采集输出；只保留完全匹配固定文件的步骤界面与经过核对的爬虫教学输出。
 网站入口为 `index.html`，课堂示例可直接访问 `test.html`。
 
 参考原项目：[weiboUserCrawler](https://github.com/wybert/weiboUserCrawler)。历史截图用于讲解操作位置，不能当作当前采集结果。
