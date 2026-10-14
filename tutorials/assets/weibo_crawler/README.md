@@ -12,6 +12,7 @@
 | `cookie_tabs.html` | 六个横向标签页，在同一个区域切换图片和说明；HTML、CSS及JavaScript自包含，无需联网或Python回调 |
 | `2019_leijun_profile.png` | 2019年的用户页和Network操作截图，只用于定位操作位置，不代表当前布局 |
 | `test.html` | 无需登录的公开教学网页，用于简短体验HTTP与HTML |
+| `leijun_first3pages_preview.html` | 2026年10月14日查询雷军2026年9月微博前3页得到的30条课堂样本，预存于Notebook结果展示单元；不包含Cookie |
 | `Gemini_Generated_Image_e5pqx0e5pqx0e5pq.jpeg` | 爬虫一般流程漫画，放在任务与流程图之后 |
 | `Gemini_Generated_Image_83uvob83uvob83uv.jpeg` | 采集边界漫画，放在Cookie准备之前；正文补充法律名称与适用边界 |
 | `Gemini_Generated_Image_8j31ik8j31ik8j31.jpeg` | 浏览器请求与HTML漫画，放在HTTP/HTML介绍之后；正文纠正404与网络失败的区别 |

@@ -28,6 +28,13 @@ if not tab_file.is_file():
     tab_file = Path('tutorials/assets/weibo_crawler/cookie_tabs.html')
 display(HTML(filename=str(tab_file)))'''
 
+COOKIE_LOAD_ASSIGNMENT = "COOKIE = COOKIE.strip() or (dotenv_values(TUTORIAL_DIR / '.env', interpolate=False).get('WEIBO_COOKIE') or '').strip()"
+CRAWL_RESULT_CODE = '''# 展示本次采集的整张表；30条课堂样本会全部显示，不发送新的请求。
+if not posts.empty:
+    display(posts)
+else:
+    print('尚无采集结果；填写 Cookie 后运行请求、解析、翻页和保存单元。')'''
+
 
 def audit(root):
     """拒绝数据、私有配置和分析输出；仅允许完全匹配固定HTML文件的教学界面。"""
@@ -38,6 +45,12 @@ def audit(root):
         files = [p for p in root.rglob('*') if p.is_file() and '_site' not in p.parts]
     for p in files:
         rel = p.relative_to(root).as_posix()
+        if p.name == '.env' or (p.name.startswith('.env.') and p.name != '.env.example'):
+            raise ValueError(f'公开材料不能包含登录配置：{rel}')
+        if p.name == '.env.example':
+            entries = [line.strip() for line in p.read_text(encoding='utf-8').splitlines()
+                       if line.strip() and not line.lstrip().startswith('#')]
+            assert entries == ['WEIBO_COOKIE=""'], f'公开.env模板必须为空：{rel}'
         if p.suffix.lower() in {'.parquet', '.csv', '.duckdb', '.sqlite', '.db', '.cookie', '.har'}:
             raise ValueError(f'公开材料不能包含数据或会话文件：{rel}')
         if '.local.' in p.name or '/output/' in '/' + rel or rel.startswith('data/'):
@@ -57,12 +70,22 @@ def audit(root):
                         assert len(outputs) == 1 and outputs[0].output_type == 'display_data', rel
                         assert dict(outputs[0].data) == {'text/html': expected,
                             'text/plain': '获取Cookie的六步标签页（会话值已遮挡）'}, rel
+                    elif cell.metadata.get('course_ui') == 'crawl_result_example':
+                        assert p.name == '01_weibo_crawler.ipynb', rel
+                        assert ast.dump(ast.parse(cell.source)) == ast.dump(ast.parse(CRAWL_RESULT_CODE)), rel
+                        expected = (root / 'tutorials/assets/weibo_crawler/leijun_first3pages_preview.html').read_text(encoding='utf-8')
+                        outputs = cell.get('outputs', [])
+                        assert len(outputs) == 1 and outputs[0].output_type == 'display_data', rel
+                        assert dict(outputs[0].data) == {'text/html': expected,
+                            'text/plain': '雷军微博前三页采集示例：30条（2026-10-14）'}, rel
                     else:
                         assert not cell.get('outputs'), rel
                 if cell.cell_type == 'code' and cell.source.strip():
                     for node in ast.walk(ast.parse(cell.source)):
                         if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'COOKIE' for t in node.targets):
-                            assert isinstance(node.value, ast.Constant) and node.value.value == '', f'公开Notebook的COOKIE必须为空：{rel}'
+                            is_blank = isinstance(node.value, ast.Constant) and node.value.value == ''
+                            is_local_load = p.name == '01_weibo_crawler.ipynb' and ast.dump(node) == ast.dump(ast.parse(COOKIE_LOAD_ASSIGNMENT).body[0])
+                            assert is_blank or is_local_load, f'公开Notebook只允许空COOKIE及固定的本地.env读取表达式：{rel}'
         if p.suffix in {'.json', '.ipynb', '.md', '.py', '.html', '.yml'}:
             text = p.read_text(encoding='utf-8')
             assert not re.search(r'(?:_T_WM|SCF|SUB|SUBP|SSOLoginState|ALF)\s*=\s*[^;\s"<>]{8,}', text), rel
@@ -105,6 +128,7 @@ def build(root):
     (tutorials / 'requirements').mkdir()
     for name in ('environment.yml', 'requirements.txt', 'README.md'):
         shutil.copy2(root / 'tutorials/requirements' / name, tutorials / 'requirements' / name)
+    shutil.copy2(root / 'tutorials/.env.example', tutorials / '.env.example')
     environment_page = nbformat.v4.new_notebook(cells=[nbformat.v4.new_markdown_cell(
         (root / 'tutorials/requirements/README.md').read_text(encoding='utf-8'))])
     environment_html, _ = HTMLExporter(template_name='lab').from_notebook_node(environment_page)
@@ -147,16 +171,18 @@ def build(root):
     <a href="environment.html">环境与运行说明</a> ·
     <a href="https://github.com/wybert/social-media-analysis-tutorials">GitHub 仓库</a></p>
     <h2>教程顺序</h2><ul>''' + ''.join(links) + '''</ul>
-    <h2>数据与登录配置</h2><p>公开材料不包含微博数据集、采集结果或 Cookie。
+    <h2>数据与登录配置</h2><p>爬虫教程保留雷军公开微博前3页的30条课堂示例，便于对照字段与采集结果；
+    公开材料不包含课堂原始微博数据集、个人 Cookie 或 .env 登录配置。
     Pandas、绘图、用户行为和 DuckDB 教程的课堂数据由教师另行提供，放入
     <code>tutorials/data/posts_two_weeks.parquet</code>。Pandas读写练习还需要同目录的
     <code>posts_preview.csv</code>，由同一份数据取前8行保存。爬虫练习使用本地 HTML；
-    学生登录 <a href="https://weibo.cn/">weibo.cn</a> 后在本机Notebook中填写自己的 Cookie；
-    先检查一个月份，再按月翻页搜集当前可见的雷军微博。</p>
+    学生登录 <a href="https://weibo.cn/">weibo.cn</a> 后，在本机Notebook的代码格中填写自己的 Cookie，
+    或在 <code>tutorials/.env</code> 中设置 <code>WEIBO_COOKIE</code>，两者任选其一；
+    课堂先检查第一页，再读取该月份前3页。</p>
 
     </main></body></html>'''
     (out / 'index.html').write_text(index, encoding='utf-8')
-    print(f'静态页面已生成：5本教程、HTML例子、无数据下载包；目录 {out.name}')
+    print(f'静态页面已生成：5本教程、HTML例子、雷军30条展示样本；目录 {out.name}')
 
 
 if __name__ == '__main__':

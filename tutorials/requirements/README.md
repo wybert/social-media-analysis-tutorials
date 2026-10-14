@@ -39,11 +39,11 @@ uv pip install --python .venv -r tutorials/requirements/requirements.txt
 ## 3. 数据与 Notebook 操作
 
 - 在 VS Code 打开整个课程目录，保留 `tutorials` 及其 `assets`、`config`、`data` 子目录。
-- 教师提供的 `posts_two_weeks.parquet` 与 `posts_preview.csv` 放入 `tutorials/data/`。公开下载包不含数据。
+- 教师提供的 `posts_two_weeks.parquet` 与 `posts_preview.csv` 放入 `tutorials/data/`。这两份课堂数据由教师另行提供；爬虫Notebook保留雷军公开微博前3页的30条展示样本。
 - 用 `Shift+Enter` 运行当前代码格；首次使用或重启内核后从初始化开始按顺序执行。
 - 看到 `NameError` 时先检查前面的定义格是否已运行；看到 `ModuleNotFoundError` 时先核对所选内核和依赖安装位置。
 - 修改代码后重跑相关单元格与后续依赖格。先在练习空白格作答，再展开参考答案。
-- 微博月份循环默认关闭；按爬虫教程登录 `weibo.cn`，将自己的 Cookie 填到本机代码格，先检查一页再启动循环。分享 Notebook 前清空真实 Cookie 和采集输出。
+- 微博月份循环默认关闭；按爬虫教程登录 `weibo.cn`，将自己的 Cookie 填到本机代码格，或将 `tutorials/.env.example` 复制为同目录的 `.env` 并设置 `WEIBO_COOKIE`。代码格非空时优先使用代码格；否则读取 `.env`；两处都为空会提示补充。先检查一页，再启动每月最多3页的课堂循环。分享 Notebook 前清空真实 Cookie 和个人采集输出，不分享 `.env`。
 
 运行另外两本 `student_notebooks` 或 `full_notebooks` 时，需要教师提供的完整课程目录，包括 `scripts`、`data/map_assets` 和 `data/geography`。五本 `tutorials` 可使用公开下载包与另行提供的数据运行。
 
