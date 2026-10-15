@@ -229,6 +229,7 @@ def build(root):
             rel = p.relative_to(root).as_posix()
             if rel.startswith('tutorials/') or rel == 'README.md':
                 archive.write(p, rel)
+    shutil.copy2(downloads / 'tutorials.zip', downloads / 'tutorials-2026-10-16.zip')
     index = '''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>社交媒体用户行为分析 · 中文实操教程</title><style>
@@ -245,9 +246,11 @@ def build(root):
     两本专题教程可按需查阅，无需先完成。网页可以直接阅读，
     代码请下载后在自己的 Conda 或 uv + venv 环境中运行。</p>
     <p><a id="classroom-download" href="''' + ARCHIVE_URL + '''">下载所有资料（含数据，需密码）</a> ·
-    <a href="downloads/tutorials.zip">仅下载教程（不含数据）</a> ·
+    <a href="downloads/tutorials-2026-10-16.zip">仅下载教程（不含数据）</a> ·
     <a href="environment.html">环境与运行说明</a> ·
     <a href="https://github.com/wybert/social-media-analysis-tutorials">GitHub 仓库</a></p>
+    <p id="materials-version">资料版本：2026-10-16。三本主教程；Pandas和Plotting位于extent补充目录。
+    请将新下载的压缩包解压到一个新文件夹，再打开其中的tutorials，避免与旧文件混在一起。</p>
     ''' + SETUP_GUIDE + '''
     <h2>课堂主线</h2><ul class="lessons">''' + ''.join(links[k] for k in MAIN_LESSONS) + '''</ul>
     <h2>按需查阅</h2><ul class="lessons">''' + ''.join(links[k] for k in REFERENCES) + '''</ul>
