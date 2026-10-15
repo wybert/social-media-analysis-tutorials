@@ -11,6 +11,7 @@ import sys
 import zipfile
 import nbformat
 from nbconvert import HTMLExporter
+from course_release import ARCHIVE_URL, EXPIRES_AT
 
 TITLES = {
     '01_weibo_crawler': ('Weibo Crawler', '第1节：按月份搜集雷军微博，请求、解析、翻页与CSV保存'),
@@ -156,9 +157,10 @@ def build(root):
     (tutorials / 'data').mkdir()
     shutil.copy2(root / 'tutorials/data/README.md', tutorials / 'data/README.md')
     (tutorials / 'requirements').mkdir()
-    for name in ('environment.yml', 'requirements.txt', 'README.md'):
+    for name in ('environment.yml', 'requirements.txt', 'requirements-nlp.txt', 'README.md'):
         shutil.copy2(root / 'tutorials/requirements' / name, tutorials / 'requirements' / name)
     shutil.copy2(root / 'tutorials/.env.example', tutorials / '.env.example')
+    shutil.copy2(root / 'tutorials/DATA_USE_TERMS.md', tutorials / 'DATA_USE_TERMS.md')
     environment_page = nbformat.v4.new_notebook(cells=[nbformat.v4.new_markdown_cell(
         (root / 'tutorials/requirements/README.md').read_text(encoding='utf-8'))])
     environment_html, _ = HTMLExporter(template_name='lab').from_notebook_node(environment_page)
@@ -200,21 +202,33 @@ def build(root):
     <p>依次学习微博爬虫、用户行为分析、DuckDB与大数据处理。第二节在分析步骤中学习Pandas与绘图；
     两本专题教程可按需查阅，无需先完成。网页可以直接阅读，
     代码请下载后在自己的 Conda 或 uv + venv 环境中运行。</p>
-    <p><a href="downloads/tutorials.zip">下载全部教程</a> ·
+    <p><a id="classroom-download" href="''' + ARCHIVE_URL + '''">下载所有资料（含数据，需密码）</a> ·
+    <a href="downloads/tutorials.zip">仅下载教程（不含数据）</a> ·
     <a href="environment.html">环境与运行说明</a> ·
     <a href="https://github.com/wybert/social-media-analysis-tutorials">GitHub 仓库</a></p>
     <h2>课堂主线</h2><ul>''' + ''.join(links[k] for k in MAIN_LESSONS) + '''</ul>
     <h2>按需查阅</h2><ul>''' + ''.join(links[k] for k in REFERENCES) + '''</ul>
     <h2>数据与登录配置</h2><p>爬虫教程保留雷军公开微博前3页的请求、解析与采集示范输出，便于对照操作和结果；
-    公开材料不包含课堂原始微博数据集、个人 Cookie 或 .env 登录配置。
-    Pandas、绘图、用户行为和 DuckDB 教程的课堂数据由教师另行提供，放入
-    <code>tutorials/data/posts_two_weeks.parquet</code>。Pandas读写练习还需要同目录的
-    <code>posts_preview.csv</code>，由同一份数据取前8行保存。爬虫练习使用本地 HTML；
+    公开源码与无需密码的教程下载包不包含课堂数据、个人Cookie或.env登录配置。</p>
+    <p>本课程学生和教师可下载AES-256加密的完整资料包，解压密码由教师在课堂提供。
+    请完整解压并保留目录结构：5本Notebook、配套资源、环境配置和数据均已放好，
+    数据位于<code>tutorials/data/posts_two_weeks.parquet</code>，小CSV读写示例位于同目录。
+    系统解压工具若不支持AES加密ZIP，请使用<a href="https://www.7-zip.org/download.html">7-Zip</a>或其他支持AES-256 ZIP的工具。</p>
+    <p id="classroom-window">含数据资料包分享至2026年10月25日23:59:59（北京时间）。
+    密码不能阻止取得资料后再次转发；已下载副本也不会自动失效。
+    下载和使用前请阅读<a href="tutorials/DATA_USE_TERMS.md">课堂数据使用与有限分享声明</a>，仅限本课程教学与作业，不得擅自转载或再分发。</p>
+    <p>爬虫练习使用本地HTML；
     学生登录 <a href="https://weibo.cn/">weibo.cn</a> 后，在本机Notebook的代码格中填写自己的 Cookie，
     或在 <code>tutorials/.env</code> 中设置 <code>WEIBO_COOKIE</code>，两者任选其一；
     课堂先检查第一页，再读取该月份前3页。</p>
 
-    </main></body></html>'''
+    </main><script>
+    if (Date.now() > Date.parse("''' + EXPIRES_AT + '''")) {
+      const link = document.getElementById('classroom-download');
+      link.removeAttribute('href');
+      link.textContent = '含数据资料包下载已结束';
+    }
+    </script></body></html>'''
     (out / 'index.html').write_text(index, encoding='utf-8')
     print(f'静态页面已生成：5本教程、HTML例子、雷军30条展示样本；目录 {out.name}')
 

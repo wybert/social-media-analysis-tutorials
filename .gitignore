@@ -5,6 +5,7 @@ __pycache__/
 .env
 .env.*
 !.env.example
+.venv/
 *.cookie
 *.har
 tutorials/config/*.local.json
@@ -12,5 +13,3 @@ tutorials/data/*
 !tutorials/data/README.md
 tutorials/output/
 data/output/
-
-.venv/

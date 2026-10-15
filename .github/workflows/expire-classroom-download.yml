@@ -1,0 +1,31 @@
+name: Expire encrypted classroom download
+on:
+  schedule:
+    # UTC 16:00 = 北京时间次日00:00；队列调度可能延迟。
+    - cron: '0 16 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  expire:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: wybert/social-media-analysis-tutorials
+    steps:
+      - name: Remove the encrypted asset after the sharing deadline
+        shell: bash
+        run: |
+          set -euo pipefail
+          cutoff=$(date -u -d '2026-10-25T15:59:59Z' +%s)
+          if [ "$(date -u +%s)" -le "$cutoff" ]; then
+            echo 'The classroom sharing window is still open.'
+            exit 0
+          fi
+          asset=$(gh release view classroom-2026-10 --json assets --jq '.assets[] | select(.name == "social-media-analysis-classroom-2026-10.zip") | .name')
+          if [ -n "$asset" ]; then
+            gh release delete-asset classroom-2026-10 "$asset" --yes
+            echo 'Encrypted classroom download removed.'
+          else
+            echo 'No encrypted classroom asset remains.'
+          fi
