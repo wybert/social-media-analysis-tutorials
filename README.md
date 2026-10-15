@@ -5,11 +5,18 @@
 
 - [课程网页](https://wybert.github.io/social-media-analysis-tutorials/)
 - [HTML示例](https://wybert.github.io/social-media-analysis-tutorials/test.html)
-- [Weibo Crawler](tutorials/01_weibo_crawler.ipynb)：登录weibo.cn，在本机代码格填写自己的Cookie，按月查询雷军微博、逐页解析、合并去重并保存CSV。
+## 课堂主线
+
+1. [Weibo Crawler](tutorials/01_weibo_crawler.ipynb)：请求、解析与保存雷军微博。
+2. [User Behavior Analysis](tutorials/04_user_behavior_analysis.ipynb)：用户记录、内容、公开表达与城市比较；在相应步骤学习Pandas和绘图。
+3. [Big Data with DuckDB](tutorials/05_big_data_with_duckdb.ipynb)：直接查询Parquet、分组汇总与大数据处理。
+
+## 按需查阅
+
 - [Pandas Analysis](tutorials/02_pandas_analysis.ipynb)
 - [Plotting](tutorials/03_plotting.ipynb)
-- [User Behavior Analysis](tutorials/04_user_behavior_analysis.ipynb)
-- [Big Data with DuckDB](tutorials/05_big_data_with_duckdb.ipynb)
+
+第二节可以直接从04开始，无需先完成02与03；细语法和更多图形留作查阅。
 
 ## 在本机运行
 

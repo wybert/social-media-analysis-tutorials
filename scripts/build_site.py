@@ -13,12 +13,15 @@ import nbformat
 from nbconvert import HTMLExporter
 
 TITLES = {
-    '01_weibo_crawler': ('Weibo Crawler', '按月份搜集雷军微博：请求、解析、翻页、去重与CSV保存'),
-    '02_pandas_analysis': ('Pandas Analysis', '读表、筛选、分组、合并、文本、时间与SQL'),
-    '03_plotting': ('Plotting', '常用图形、子图与交互式绘图介绍'),
-    '04_user_behavior_analysis': ('User Behavior Analysis', '记录贡献、讨论内容、公开表达与城市汇总'),
-    '05_big_data_with_duckdb': ('Big Data with DuckDB', '直接查询Parquet、汇总后绘图、查询计划与多核'),
+    '01_weibo_crawler': ('Weibo Crawler', '第1节：按月份搜集雷军微博，请求、解析、翻页与CSV保存'),
+    '02_pandas_analysis': ('Pandas Analysis', '按需查阅：读表、筛选、分组、合并、文本、时间与SQL'),
+    '03_plotting': ('Plotting', '按需查阅：Matplotlib、Pandas绘图与交互式绘图'),
+    '04_user_behavior_analysis': ('User Behavior Analysis', '第2节：用户记录、内容与公开表达；Pandas和绘图随分析步骤讲解'),
+    '05_big_data_with_duckdb': ('Big Data with DuckDB', '第3节：直接查询Parquet、汇总后绘图、查询计划与多核'),
 }
+
+MAIN_LESSONS = ('01_weibo_crawler', '04_user_behavior_analysis', '05_big_data_with_duckdb')
+REFERENCES = ('02_pandas_analysis', '03_plotting')
 
 COOKIE_TABS_CODE = '''# 显示六步操作标签页；不发送网页请求，也不读取 Cookie。
 from pathlib import Path
@@ -163,19 +166,21 @@ def build(root):
                               r'\1<nav style="padding:16px"><a href="index.html">返回课程首页</a></nav>',
                               environment_html, count=1)
     (out / 'environment.html').write_text(environment_html, encoding='utf-8')
-    links = []
+    links = {}
     for stem, (title, description) in TITLES.items():
         source = root / 'tutorials' / (stem + '.ipynb')
         notebook = nbformat.read(source, as_version=4)
         body, _ = HTMLExporter(template_name='lab', embed_images=True).from_notebook_node(notebook)
         body = preserve_mermaid_source(body, notebook)
+        # 网页中的参考链接打开HTML教程；Notebook自身仍保留.ipynb相对链接。
+        body = re.sub(r'''(href=["'])(0[1-5]_[A-Za-z0-9_]+)\.ipynb(?=[#"'])''', r'\1\2.html', body)
         navigation = ('<nav style="padding:16px;font:16px sans-serif;border-bottom:1px solid #ddd">'
                       '<a href="../index.html">返回课程首页</a> · '
                       f'<a href="{stem}.ipynb" download>下载本页Notebook</a></nav>')
         body = re.sub(r'(<body\b[^>]*>)', r'\1' + navigation, body, count=1)
         (tutorials / (stem + '.html')).write_text(body, encoding='utf-8')
         shutil.copy2(source, tutorials / source.name)
-        links.append(f'<li><a href="tutorials/{stem}.html">{escape(title)}</a><p>{escape(description)}</p></li>')
+        links[stem] = f'<li><a href="tutorials/{stem}.html">{escape(title)}</a><p>{escape(description)}</p></li>'
     downloads = out / 'downloads'
     downloads.mkdir()
     with zipfile.ZipFile(downloads / 'tutorials.zip', 'w', zipfile.ZIP_DEFLATED) as archive:
@@ -192,12 +197,14 @@ def build(root):
     ul{padding-left:24px}li{padding:12px 0;border-bottom:1px solid #ddd}li a{font-size:22px;font-weight:600}
     li p{margin:4px 0;color:#536173}code{background:#e9edf0;padding:2px 5px}footer{margin-top:40px;color:#536173}
     </style></head><body><main><h1>社交媒体用户行为分析</h1>
-    <p>学习网页采集、表格分析、绘图、用户行为分析与 DuckDB。网页可以直接阅读，
+    <p>依次学习微博爬虫、用户行为分析、DuckDB与大数据处理。第二节在分析步骤中学习Pandas与绘图；
+    两本专题教程可按需查阅，无需先完成。网页可以直接阅读，
     代码请下载后在自己的 Conda 或 uv + venv 环境中运行。</p>
     <p><a href="downloads/tutorials.zip">下载全部教程</a> ·
     <a href="environment.html">环境与运行说明</a> ·
     <a href="https://github.com/wybert/social-media-analysis-tutorials">GitHub 仓库</a></p>
-    <h2>教程顺序</h2><ul>''' + ''.join(links) + '''</ul>
+    <h2>课堂主线</h2><ul>''' + ''.join(links[k] for k in MAIN_LESSONS) + '''</ul>
+    <h2>按需查阅</h2><ul>''' + ''.join(links[k] for k in REFERENCES) + '''</ul>
     <h2>数据与登录配置</h2><p>爬虫教程保留雷军公开微博前3页的请求、解析与采集示范输出，便于对照操作和结果；
     公开材料不包含课堂原始微博数据集、个人 Cookie 或 .env 登录配置。
     Pandas、绘图、用户行为和 DuckDB 教程的课堂数据由教师另行提供，放入
