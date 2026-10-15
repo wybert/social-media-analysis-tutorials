@@ -10,19 +10,54 @@ import subprocess
 import sys
 import zipfile
 import nbformat
+from IPython.core.inputtransformer2 import TransformerManager
 from nbconvert import HTMLExporter
 from course_release import ARCHIVE_URL, EXPIRES_AT
 
 TITLES = {
     '01_weibo_crawler': ('Weibo Crawler', '第1节：按月份搜集雷军微博，请求、解析、翻页与CSV保存'),
-    '02_pandas_analysis': ('Pandas Analysis', '按需查阅：读表、筛选、分组、合并、文本、时间与SQL'),
-    '03_plotting': ('Plotting', '按需查阅：Matplotlib、Pandas绘图与交互式绘图'),
-    '04_user_behavior_analysis': ('User Behavior Analysis', '第2节：用户记录、内容与公开表达；Pandas和绘图随分析步骤讲解'),
-    '05_big_data_with_duckdb': ('Big Data with DuckDB', '第3节：直接查询Parquet、汇总后绘图、查询计划与多核'),
+    'extent/02_pandas_analysis': ('Pandas Analysis', '按需查阅：读表、筛选、分组、合并、文本、时间与SQL'),
+    'extent/03_plotting': ('Plotting', '按需查阅：Matplotlib、Pandas绘图与交互式绘图'),
+    '02_user_behavior_analysis': ('User Behavior Analysis', '第2节：用户记录、内容与公开表达；Pandas和绘图随分析步骤讲解'),
+    '03_big_data_with_duckdb': ('Big Data with DuckDB', '第3节：直接查询Parquet、汇总后绘图、查询计划与多核'),
 }
 
-MAIN_LESSONS = ('01_weibo_crawler', '04_user_behavior_analysis', '05_big_data_with_duckdb')
-REFERENCES = ('02_pandas_analysis', '03_plotting')
+MAIN_LESSONS = ('01_weibo_crawler', '02_user_behavior_analysis', '03_big_data_with_duckdb')
+REFERENCES = ('extent/02_pandas_analysis', 'extent/03_plotting')
+
+SETUP_GUIDE = '''<section id="getting-started"><h2>课前准备：从安装到运行</h2>
+<p>请在自己的电脑上使用桌面版VS Code。网页用于阅读；运行代码需要下载资料并选择本机Python环境。</p>
+<ol class="setup">
+<li><strong>安装Visual Studio Code。</strong>前往<a href="https://code.visualstudio.com/download">VS Code官方下载页</a>，选择自己的操作系统并安装。</li>
+<li><strong>安装Python和Jupyter扩展。</strong>在VS Code左侧打开Extensions（扩展），分别搜索并安装Microsoft发布的
+<a href="https://marketplace.visualstudio.com/items?itemName=ms-python.python">Python</a>和
+<a href="https://marketplace.visualstudio.com/items?itemName=ms-toolsai.jupyter">Jupyter</a>。扩展负责编辑和执行Notebook，Python运行环境在下一步安装。</li>
+<li><strong>安装Miniconda。</strong>Miniconda提供Python和Conda；课程环境会使用Python 3.11，无需再单独安装Python。
+可在<a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/">清华镜像目录</a>选择安装包：
+<div class="table-scroll"><table><thead><tr><th>电脑类型</th><th>安装包</th></tr></thead><tbody>
+<tr><td>Windows，Intel / AMD 64位</td><td><a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-Windows-x86_64.exe">Windows x86_64 .exe</a></td></tr>
+<tr><td>Mac，Apple M系列芯片</td><td><a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-arm64.pkg">macOS ARM64 .pkg</a></td></tr>
+<tr><td>Mac，Intel芯片</td><td><a href="https://mirrors.tuna.tsinghua.edu.cn/anaconda/miniconda/Miniconda3-latest-MacOSX-x86_64.pkg">macOS x86_64 .pkg</a></td></tr>
+<tr><td>Windows ARM设备</td><td>镜像暂未提供原生ARM版。Windows 11 ARM可尝试上面的x86_64安装包，依靠系统的<a href="https://learn.microsoft.com/windows/arm/apps-on-arm-x86-emulation">x64兼容机制</a>；课程环境尚未在此类设备上实测。</td></tr>
+</tbody></table></div>
+Mac可在“关于本机”查看芯片类型；Windows可在“设置 → 系统 → 系统信息”查看系统类型。安装完成后重新打开VS Code。</li>
+<li><strong>下载课程资料。</strong>点击本页上方“下载所有资料（含数据，需密码）”，解压密码由教师提供。
+只下载“仅下载教程”或GitHub源码的同学还需另行取得课堂数据。</li>
+<li><strong>完整解压。</strong>将整个资料包解压到自己的课程文件夹，不要只拖出单个Notebook。
+如果系统工具不能解压AES加密ZIP，Windows可使用<a href="https://www.7-zip.org/download.html">7-Zip</a>。
+解压后应能看到<code>social-media-analysis-classroom</code>文件夹，其中有<code>README.md</code>和<code>tutorials</code>。</li>
+<li><strong>用VS Code打开整个文件夹。</strong>选择“File → Open Folder / 文件 → 打开文件夹”，打开上一步的
+<code>social-media-analysis-classroom</code>。资源管理器中应直接显示<code>tutorials</code>。</li>
+<li><strong>在VS Code终端创建环境。</strong>选择“Terminal → New Terminal / 终端 → 新建终端”，确认当前目录包含<code>tutorials</code>，依次执行：
+<pre><code>conda env create -f tutorials/requirements/environment.yml
+conda activate user-behavior-class</code></pre>
+首次创建需要下载依赖，请等待命令完成。若Windows提示找不到conda，在开始菜单打开“Anaconda Prompt (Miniconda3)”，运行
+<code>conda init powershell</code>，然后关闭并重新打开VS Code及其终端。</li>
+<li><strong>打开Notebook并选择内核。</strong>先打开<code>tutorials/01_weibo_crawler.ipynb</code>，点击右上角“Select Kernel / 选择内核”，
+选择“Python Environments / Python环境”中的<code>user-behavior-class</code>（必要时先点“Select Another Kernel / 选择其他内核”）。
+点击代码格左侧运行按钮，或按<code>Shift + Enter</code>，从上到下执行。第二、三节课依次打开02和03；<code>extent</code>中的两本为补充资料。</li>
+</ol><p>其他环境选择、可选模型依赖及常见问题见<a href="environment.html">环境与运行说明</a>。
+Notebook操作也可参考<a href="https://code.visualstudio.com/docs/datascience/jupyter-notebooks">VS Code官方指南</a>。</p></section>'''
 
 COOKIE_TABS_CODE = '''# 显示六步操作标签页；不发送网页请求，也不读取 Cookie。
 from pathlib import Path
@@ -112,7 +147,7 @@ def audit(root):
                     else:
                         assert not cell.get('outputs'), rel
                 if cell.cell_type == 'code' and cell.source.strip():
-                    for node in ast.walk(ast.parse(cell.source)):
+                    for node in ast.walk(ast.parse(TransformerManager().transform_cell(cell.source))):
                         if isinstance(node, ast.Assign) and any(isinstance(t, ast.Name) and t.id == 'COOKIE' for t in node.targets):
                             is_blank = isinstance(node.value, ast.Constant) and node.value.value == ''
                             is_local_load = p.name == '01_weibo_crawler.ipynb' and ast.dump(node) == ast.dump(ast.parse(COOKIE_LOAD_ASSIGNMENT).body[0])
@@ -171,17 +206,21 @@ def build(root):
     links = {}
     for stem, (title, description) in TITLES.items():
         source = root / 'tutorials' / (stem + '.ipynb')
+        destination = tutorials / (stem + '.html')
+        destination.parent.mkdir(parents=True, exist_ok=True)
         notebook = nbformat.read(source, as_version=4)
         body, _ = HTMLExporter(template_name='lab', embed_images=True).from_notebook_node(notebook)
         body = preserve_mermaid_source(body, notebook)
         # 网页中的参考链接打开HTML教程；Notebook自身仍保留.ipynb相对链接。
-        body = re.sub(r'''(href=["'])(0[1-5]_[A-Za-z0-9_]+)\.ipynb(?=[#"'])''', r'\1\2.html', body)
+        body = re.sub(r'''(href=["'])((?:\.\.?/|extent/)*0[1-5]_[A-Za-z0-9_]+)\.ipynb(?=[#"'])''',
+                      r'\1\2.html', body)
+        home = '../../index.html' if '/' in stem else '../index.html'
         navigation = ('<nav style="padding:16px;font:16px sans-serif;border-bottom:1px solid #ddd">'
-                      '<a href="../index.html">返回课程首页</a> · '
-                      f'<a href="{stem}.ipynb" download>下载本页Notebook</a></nav>')
+                      f'<a href="{home}">返回课程首页</a> · '
+                      f'<a href="{source.name}" download>下载本页Notebook</a></nav>')
         body = re.sub(r'(<body\b[^>]*>)', r'\1' + navigation, body, count=1)
-        (tutorials / (stem + '.html')).write_text(body, encoding='utf-8')
-        shutil.copy2(source, tutorials / source.name)
+        destination.write_text(body, encoding='utf-8')
+        shutil.copy2(source, destination.with_suffix('.ipynb'))
         links[stem] = f'<li><a href="tutorials/{stem}.html">{escape(title)}</a><p>{escape(description)}</p></li>'
     downloads = out / 'downloads'
     downloads.mkdir()
@@ -196,8 +235,11 @@ def build(root):
     body{margin:0;background:#fafaf7;color:#172334;font:17px/1.8 system-ui,-apple-system,sans-serif}
     main{max-width:880px;margin:auto;padding:48px 24px}h1{font-size:34px;line-height:1.4;margin:0 0 18px}
     h2{font-size:24px;margin-top:36px}a{color:#1257a0;text-underline-offset:4px}p{margin:8px 0 18px}
-    ul{padding-left:24px}li{padding:12px 0;border-bottom:1px solid #ddd}li a{font-size:22px;font-weight:600}
+    ul,ol{padding-left:24px}li{padding:12px 0;border-bottom:1px solid #ddd}.lessons>li>a{font-size:22px;font-weight:600}
     li p{margin:4px 0;color:#536173}code{background:#e9edf0;padding:2px 5px}footer{margin-top:40px;color:#536173}
+    pre{overflow:auto;background:#e9edf0;padding:14px;line-height:1.6}pre code{padding:0}
+    .table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px}
+    td,th{text-align:left;vertical-align:top;padding:8px;border:1px solid #cbd3da}.setup>li{padding-left:6px}
     </style></head><body><main><h1>社交媒体用户行为分析</h1>
     <p>依次学习微博爬虫、用户行为分析、DuckDB与大数据处理。第二节在分析步骤中学习Pandas与绘图；
     两本专题教程可按需查阅，无需先完成。网页可以直接阅读，
@@ -206,8 +248,9 @@ def build(root):
     <a href="downloads/tutorials.zip">仅下载教程（不含数据）</a> ·
     <a href="environment.html">环境与运行说明</a> ·
     <a href="https://github.com/wybert/social-media-analysis-tutorials">GitHub 仓库</a></p>
-    <h2>课堂主线</h2><ul>''' + ''.join(links[k] for k in MAIN_LESSONS) + '''</ul>
-    <h2>按需查阅</h2><ul>''' + ''.join(links[k] for k in REFERENCES) + '''</ul>
+    ''' + SETUP_GUIDE + '''
+    <h2>课堂主线</h2><ul class="lessons">''' + ''.join(links[k] for k in MAIN_LESSONS) + '''</ul>
+    <h2>按需查阅</h2><ul class="lessons">''' + ''.join(links[k] for k in REFERENCES) + '''</ul>
     <h2>数据与登录配置</h2><p>爬虫教程保留雷军公开微博前3页的请求、解析与采集示范输出，便于对照操作和结果；
     公开源码与无需密码的教程下载包不包含课堂数据、个人Cookie或.env登录配置。</p>
     <p>本课程学生和教师可下载AES-256加密的完整资料包，解压密码由教师在课堂提供。

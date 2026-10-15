@@ -1,6 +1,6 @@
 # 署名与许可
 
-`02_pandas_analysis.ipynb` 的章节组织参考 Julia Evans 的
+`extent/02_pandas_analysis.ipynb` 的章节组织参考 Julia Evans 的
 [Pandas Cookbook](https://github.com/jvns/pandas-cookbook)。
 改编内容包括中文说明、微博数据示例、用户统计、时间处理与练习。
 该教程内容沿用 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)；

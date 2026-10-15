@@ -1,4 +1,4 @@
-# 仅用于04的7.4、7.5选做题，安装到基础课程环境的副本或自己的venv。
+# 仅用于02用户行为分析的7.4、7.5选做题，安装到基础课程环境的副本或自己的venv。
 # 依赖范围与已验证的BERTopic 0.17 / Transformers 4组合保持一致。
 bertopic==0.17.3
 sentence-transformers==5.1.1

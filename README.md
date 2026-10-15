@@ -7,20 +7,21 @@
 含数据资料包分享至2026年10月25日23:59:59（北京时间）；使用限制见[数据使用声明](tutorials/DATA_USE_TERMS.md)。
 
 - [课程网页](https://wybert.github.io/social-media-analysis-tutorials/)
+- [课前安装与运行：八个步骤](https://wybert.github.io/social-media-analysis-tutorials/#getting-started)
 - [HTML示例](https://wybert.github.io/social-media-analysis-tutorials/test.html)
 
 ## 课堂主线
 
 1. [Weibo Crawler](tutorials/01_weibo_crawler.ipynb)：请求、解析与保存雷军微博。
-2. [User Behavior Analysis](tutorials/04_user_behavior_analysis.ipynb)：用户记录、内容、公开表达与城市比较；在相应步骤学习Pandas和绘图。
-3. [Big Data with DuckDB](tutorials/05_big_data_with_duckdb.ipynb)：直接查询Parquet、分组汇总与大数据处理。
+2. [User Behavior Analysis](tutorials/02_user_behavior_analysis.ipynb)：用户记录、内容、公开表达与城市比较；在相应步骤学习Pandas和绘图。
+3. [Big Data with DuckDB](tutorials/03_big_data_with_duckdb.ipynb)：直接查询Parquet、分组汇总与大数据处理。
 
 ## 按需查阅
 
-- [Pandas Analysis](tutorials/02_pandas_analysis.ipynb)
-- [Plotting](tutorials/03_plotting.ipynb)
+- [Pandas Analysis](tutorials/extent/02_pandas_analysis.ipynb)
+- [Plotting](tutorials/extent/03_plotting.ipynb)
 
-第二节可以直接从04开始，无需先完成02与03；细语法和更多图形留作查阅。
+课堂依次打开01、02、03；extent中的两本教程供按需查阅，无需先完成。
 
 ## 在本机运行
 
