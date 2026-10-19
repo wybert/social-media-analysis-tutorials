@@ -59,7 +59,7 @@ conda activate user-behavior-class</code></pre>
 <code>conda init powershell</code>，然后关闭并重新打开VS Code及其终端。</li>
 <li><strong>打开Notebook并选择内核。</strong>先打开<code>tutorials/01_weibo_crawler.ipynb</code>，点击右上角“Select Kernel / 选择内核”，
 选择“Python Environments / Python环境”中的<code>user-behavior-class</code>（必要时先点“Select Another Kernel / 选择其他内核”）。
-点击代码格左侧运行按钮，或按<code>Shift + Enter</code>，从上到下执行。第一次下午依次使用01—03，第二次下午依次使用04—06；<code>extent</code>中的两本为补充资料。</li>
+点击代码格左侧运行按钮，或按<code>Shift + Enter</code>，从上到下执行。第一次课依次使用01—03，第二次课依次使用04—06；<code>extent</code>中的两本为补充资料。</li>
 </ol><p>其他环境选择、可选模型依赖及常见问题见<a href="environment.html">环境与运行说明</a>。
 Notebook操作也可参考<a href="https://code.visualstudio.com/docs/datascience/jupyter-notebooks">VS Code官方指南</a>。</p></section>'''
 
@@ -246,7 +246,7 @@ def build(root):
     .table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px}
     td,th{text-align:left;vertical-align:top;padding:8px;border:1px solid #cbd3da}.setup>li{padding-left:6px}
     </style></head><body><main><h1>社交媒体用户行为分析</h1>
-    <p>两次下午课，依次学习微博爬虫、用户行为分析、DuckDB、空间分析、热浪相关表达和空间大数据分析。第二节在分析步骤中学习Pandas与绘图；
+    <p>课程分两次，依次学习微博爬虫、用户行为分析、DuckDB、空间分析、热浪相关表达和空间大数据分析。第二节在分析步骤中学习Pandas与绘图；
     两本专题教程可按需查阅，无需先完成。网页可以直接阅读，
     代码请下载后在自己的 Conda 或 uv + venv 环境中运行。</p>
     <p><a id="classroom-download" href="''' + ARCHIVE_URL + '''">下载所有资料（含数据，需密码）</a> ·
@@ -256,8 +256,8 @@ def build(root):
     <p id="materials-version">资料版本：''' + MATERIAL_VERSION + '''。六本主教程（01—06）；Pandas和Plotting位于extent补充目录。
     请将新下载的压缩包解压到一个新文件夹，再打开其中的tutorials，避免与旧文件混在一起。</p>
     ''' + SETUP_GUIDE + '''
-    <h2>第一次下午：社交媒体用户行为分析</h2><ul class="lessons">''' + ''.join(links[k] for k in MAIN_LESSONS[:3]) + '''</ul>
-    <h2>第二次下午：用户时空行为分析</h2><ul class="lessons">''' + ''.join(links[k] for k in MAIN_LESSONS[3:]) + '''</ul>
+    <h2>第一次课：社交媒体用户行为分析</h2><ul class="lessons">''' + ''.join(links[k] for k in MAIN_LESSONS[:3]) + '''</ul>
+    <h2>第二次课：用户时空行为分析</h2><ul class="lessons">''' + ''.join(links[k] for k in MAIN_LESSONS[3:]) + '''</ul>
     <h2>按需查阅</h2><ul class="lessons">''' + ''.join(links[k] for k in REFERENCES) + '''</ul>
     <h2>数据与登录配置</h2><p>爬虫教程保留雷军公开微博前3页的请求、解析与采集示范输出，便于对照操作和结果；
     公开源码与无需密码的教程下载包不包含课堂数据、个人Cookie或.env登录配置。</p>
