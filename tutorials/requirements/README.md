@@ -53,7 +53,7 @@ uv pip install --python .venv -r tutorials/requirements/requirements.txt
 - 修改代码后重跑相关单元格与后续依赖格。先在练习空白格作答，再展开参考答案。
 - 微博月份循环默认关闭；按爬虫教程登录 `weibo.cn`，将自己的 Cookie 填到本机代码格，或将 `tutorials/.env.example` 复制为同目录的 `.env` 并设置 `WEIBO_COOKIE`。代码格非空时优先使用代码格；否则读取 `.env`；两处都为空会提示补充。先检查一页，再启动每月最多3页的课堂循环。分享 Notebook 前清空真实 Cookie 和个人采集输出，不分享 `.env`。
 
-运行另外两本 `student_notebooks` 或 `full_notebooks` 时，需要教师提供的完整课程目录，包括 `scripts`、`data/map_assets` 和 `data/geography`。五本 `tutorials` 可直接使用含数据的完整加密包运行，也可使用公开教程包与另行提供的数据。
+运行另外两本 `student_notebooks` 或 `full_notebooks` 时，需要教师提供的完整课程目录，包括 `scripts`、`data/map_assets` 和 `data/geography`。八本 `tutorials`（01—06主课与extent中的两本补充）可直接使用含数据的完整加密包运行，也可使用公开教程包与另行提供的数据。
 
 ## 4. 使用范围
 
@@ -85,3 +85,19 @@ uv用户可运行`uv pip install --python .venv -r tutorials/requirements/requir
 日期刻度使用`ZoneInfo('Asia/Shanghai')`；基础环境显式包含Python时区数据包（Conda的`python-tzdata`、pip的`tzdata`），用于没有系统IANA时区库的环境。参见[Python时区数据说明](https://docs.python.org/3.11/library/zoneinfo.html#data-sources)。Matplotlib绘图前选择当前电脑已安装的中文字体，没有匹配字体时使用英文图题；Plotly在浏览器中显示交互图。
 
 教程按跨平台方式编写。当前运行验证在macOS的课程Conda环境完成，尚未做Windows实机整本运行验证；Windows同学应使用同一份环境配置、数据与目录结构。
+
+## 7. 第二次下午：04—06时空分析
+
+依次打开`04_spatial_user_behavior.ipynb`、`05_heatwave_user_expression.ipynb`和`06_spatial_big_data_duckdb.ipynb`，每本可从空内核独立运行，继续读取`tutorials/data/posts_two_weeks.parquet`。05另用`data/spatial/chengdu_weather_20220812_25.csv`的14行真实ERA5缓存；课堂不实时请求天气数据。
+
+环境已加入GeoPandas、Shapely、pyproj与Lonboard 0.13。已有Conda环境先执行本页第1节的更新命令，安装后重启Notebook内核。uv用户重新运行第2节的依赖安装命令。
+
+06首次执行`INSTALL spatial`需要网络，以获取与当前DuckDB匹配的扩展；`LOAD spatial`对每个新连接执行。Lonboard使用Jupyter Widget/WebGL，在VS Code安装Jupyter扩展并运行对应代码格；缺少Widget显示时先核对课程内核、重启内核并重新运行，不能仅根据静态网页判断Widget运行情况。
+
+04使用GeoPandas的`plot()`绘制静态地图，Plotly展示交互式点线与高德瓦片；05使用GeoPlot、Cartopy绘制行政区和KDE静态图；06使用Lonboard的网格面、比例圆点和城市联系弧线。地图展示0.02度格子边界，另比较0.04度合并结果，颜色表示每格记录数。
+
+示例通过高德栅格瓦片读取底图，不调用高德JS API，因此不需要填写JS API Key。在线底图仍需要网络；统计计算与静态图可离线完成。分级设色使用的mapclassify、05使用的GeoPlot与Cartopy、度量转换使用的xyconvert均已写入依赖配置；xyconvert为纯Python/NumPy包，通过环境配置中的pip段安装。
+
+微博源位置已确认为GCJ-02。高德底图、原始网格和随资料提供的DataV行政边界直接叠加，不重复偏移；原始GCJ-02不强行标记EPSG:4326，因此Lonboard可能提示缺少正式CRS。需要米制度量时，先用gcj2wgs近似转换副本，再声明EPSG:4326并投影。原始数据不回写，保留高德底图与DataV边界的标注和署名。
+
+四川省界、市州界与成都区县界已缓存在`data/spatial/boundaries/`，课堂无需实时请求边界接口。边界为学习交流参考快照，缓存日期不等于行政区划生效日期；地图底图瓦片仍需联网。

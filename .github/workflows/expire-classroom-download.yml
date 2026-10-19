@@ -22,10 +22,8 @@ jobs:
             echo 'The classroom sharing window is still open.'
             exit 0
           fi
-          asset=$(gh release view classroom-2026-10 --json assets --jq '.assets[] | select(.name == "social-media-analysis-classroom-2026-10-16.zip") | .name')
-          if [ -n "$asset" ]; then
-            gh release delete-asset classroom-2026-10 "$asset" --yes
-            echo 'Encrypted classroom download removed.'
-          else
-            echo 'No encrypted classroom asset remains.'
-          fi
+          # 清理同一课堂Release的新旧加密包及校验文件，避免旧入口继续提供数据。
+          gh release view classroom-2026-10 --json assets --jq '.assets[] | select(.name | startswith("social-media-analysis-classroom-")) | .name' > /tmp/classroom-assets.txt
+          while IFS= read -r asset; do
+            [ -z "$asset" ] || gh release delete-asset classroom-2026-10 "$asset" --yes
+          done < /tmp/classroom-assets.txt

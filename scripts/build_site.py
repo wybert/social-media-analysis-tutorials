@@ -12,7 +12,7 @@ import zipfile
 import nbformat
 from IPython.core.inputtransformer2 import TransformerManager
 from nbconvert import HTMLExporter
-from course_release import ARCHIVE_URL, EXPIRES_AT
+from course_release import ARCHIVE_URL, EXPIRES_AT, MATERIAL_VERSION
 
 TITLES = {
     '01_weibo_crawler': ('Weibo Crawler', '第1节：按月份搜集雷军微博，请求、解析、翻页与CSV保存'),
@@ -20,9 +20,13 @@ TITLES = {
     'extent/03_plotting': ('Plotting', '按需查阅：Matplotlib、Pandas绘图与交互式绘图'),
     '02_user_behavior_analysis': ('User Behavior Analysis', '第2节：用户记录、内容与公开表达；Pandas和绘图随分析步骤讲解'),
     '03_big_data_with_duckdb': ('Big Data with DuckDB', '第3节：直接查询Parquet、汇总后绘图、查询计划与多核'),
+    '04_spatial_user_behavior': ('Spatial Analysis and User Behavior', '第4节：矢量与栅格、空间连接、分级设色与用户位置观测'),
+    '05_heatwave_user_expression': ('Heatwave and User Expression', '第5节：热相关讨论、情感变化、城市差异与四川空间分布'),
+    '06_spatial_big_data_duckdb': ('Spatial Big Data with DuckDB', '第6节：空间SQL、全国网格汇总、城市间观测联系与Lonboard'),
 }
 
-MAIN_LESSONS = ('01_weibo_crawler', '02_user_behavior_analysis', '03_big_data_with_duckdb')
+MAIN_LESSONS = ('01_weibo_crawler', '02_user_behavior_analysis', '03_big_data_with_duckdb',
+                '04_spatial_user_behavior', '05_heatwave_user_expression', '06_spatial_big_data_duckdb')
 REFERENCES = ('extent/02_pandas_analysis', 'extent/03_plotting')
 
 SETUP_GUIDE = '''<section id="getting-started"><h2>课前准备：从安装到运行</h2>
@@ -55,7 +59,7 @@ conda activate user-behavior-class</code></pre>
 <code>conda init powershell</code>，然后关闭并重新打开VS Code及其终端。</li>
 <li><strong>打开Notebook并选择内核。</strong>先打开<code>tutorials/01_weibo_crawler.ipynb</code>，点击右上角“Select Kernel / 选择内核”，
 选择“Python Environments / Python环境”中的<code>user-behavior-class</code>（必要时先点“Select Another Kernel / 选择其他内核”）。
-点击代码格左侧运行按钮，或按<code>Shift + Enter</code>，从上到下执行。第二、三节课依次打开02和03；<code>extent</code>中的两本为补充资料。</li>
+点击代码格左侧运行按钮，或按<code>Shift + Enter</code>，从上到下执行。第一次下午依次使用01—03，第二次下午依次使用04—06；<code>extent</code>中的两本为补充资料。</li>
 </ol><p>其他环境选择、可选模型依赖及常见问题见<a href="environment.html">环境与运行说明</a>。
 Notebook操作也可参考<a href="https://code.visualstudio.com/docs/datascience/jupyter-notebooks">VS Code官方指南</a>。</p></section>'''
 
@@ -212,7 +216,7 @@ def build(root):
         body, _ = HTMLExporter(template_name='lab', embed_images=True).from_notebook_node(notebook)
         body = preserve_mermaid_source(body, notebook)
         # 网页中的参考链接打开HTML教程；Notebook自身仍保留.ipynb相对链接。
-        body = re.sub(r'''(href=["'])((?:\.\.?/|extent/)*0[1-5]_[A-Za-z0-9_]+)\.ipynb(?=[#"'])''',
+        body = re.sub(r'''(href=["'])((?:\.\.?/|extent/)*0[1-6]_[A-Za-z0-9_]+)\.ipynb(?=[#"'])''',
                       r'\1\2.html', body)
         home = '../../index.html' if '/' in stem else '../index.html'
         navigation = ('<nav style="padding:16px;font:16px sans-serif;border-bottom:1px solid #ddd">'
@@ -229,7 +233,7 @@ def build(root):
             rel = p.relative_to(root).as_posix()
             if rel.startswith('tutorials/') or rel == 'README.md':
                 archive.write(p, rel)
-    shutil.copy2(downloads / 'tutorials.zip', downloads / 'tutorials-2026-10-16.zip')
+    shutil.copy2(downloads / 'tutorials.zip', downloads / f'tutorials-{MATERIAL_VERSION}.zip')
     index = '''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>社交媒体用户行为分析 · 中文实操教程</title><style>
@@ -242,23 +246,24 @@ def build(root):
     .table-scroll{overflow:auto}table{border-collapse:collapse;width:100%;margin:12px 0;font-size:15px}
     td,th{text-align:left;vertical-align:top;padding:8px;border:1px solid #cbd3da}.setup>li{padding-left:6px}
     </style></head><body><main><h1>社交媒体用户行为分析</h1>
-    <p>依次学习微博爬虫、用户行为分析、DuckDB与大数据处理。第二节在分析步骤中学习Pandas与绘图；
+    <p>两次下午课，依次学习微博爬虫、用户行为分析、DuckDB、空间分析、热浪相关表达和空间大数据分析。第二节在分析步骤中学习Pandas与绘图；
     两本专题教程可按需查阅，无需先完成。网页可以直接阅读，
     代码请下载后在自己的 Conda 或 uv + venv 环境中运行。</p>
     <p><a id="classroom-download" href="''' + ARCHIVE_URL + '''">下载所有资料（含数据，需密码）</a> ·
-    <a href="downloads/tutorials-2026-10-16.zip">仅下载教程（不含数据）</a> ·
+    <a href="downloads/tutorials-''' + MATERIAL_VERSION + '''.zip">仅下载教程（不含数据）</a> ·
     <a href="environment.html">环境与运行说明</a> ·
     <a href="https://github.com/wybert/social-media-analysis-tutorials">GitHub 仓库</a></p>
-    <p id="materials-version">资料版本：2026-10-16。三本主教程；Pandas和Plotting位于extent补充目录。
+    <p id="materials-version">资料版本：''' + MATERIAL_VERSION + '''。六本主教程（01—06）；Pandas和Plotting位于extent补充目录。
     请将新下载的压缩包解压到一个新文件夹，再打开其中的tutorials，避免与旧文件混在一起。</p>
     ''' + SETUP_GUIDE + '''
-    <h2>课堂主线</h2><ul class="lessons">''' + ''.join(links[k] for k in MAIN_LESSONS) + '''</ul>
+    <h2>第一次下午：社交媒体用户行为分析</h2><ul class="lessons">''' + ''.join(links[k] for k in MAIN_LESSONS[:3]) + '''</ul>
+    <h2>第二次下午：用户时空行为分析</h2><ul class="lessons">''' + ''.join(links[k] for k in MAIN_LESSONS[3:]) + '''</ul>
     <h2>按需查阅</h2><ul class="lessons">''' + ''.join(links[k] for k in REFERENCES) + '''</ul>
     <h2>数据与登录配置</h2><p>爬虫教程保留雷军公开微博前3页的请求、解析与采集示范输出，便于对照操作和结果；
     公开源码与无需密码的教程下载包不包含课堂数据、个人Cookie或.env登录配置。</p>
     <p>本课程学生和教师可下载AES-256加密的完整资料包，解压密码由教师在课堂提供。
-    请完整解压并保留目录结构：5本Notebook、配套资源、环境配置和数据均已放好，
-    数据位于<code>tutorials/data/posts_two_weeks.parquet</code>，小CSV读写示例位于同目录。
+    请完整解压并保留目录结构：8本Notebook（6本主课、2本补充）、配套资源、环境配置和数据均已放好，
+    数据位于<code>tutorials/data/posts_two_weeks.parquet</code>，小CSV读写示例位于同目录；行政边界和天气缓存位于<code>tutorials/data/spatial/</code>。
     系统解压工具若不支持AES加密ZIP，请使用<a href="https://www.7-zip.org/download.html">7-Zip</a>或其他支持AES-256 ZIP的工具。</p>
     <p id="classroom-window">含数据资料包分享至2026年10月25日23:59:59（北京时间）。
     密码不能阻止取得资料后再次转发；已下载副本也不会自动失效。
@@ -276,7 +281,7 @@ def build(root):
     }
     </script></body></html>'''
     (out / 'index.html').write_text(index, encoding='utf-8')
-    print(f'静态页面已生成：5本教程、HTML例子、雷军30条展示样本；目录 {out.name}')
+    print(f'静态页面已生成：{len(TITLES)}本教程、HTML例子、雷军30条展示样本；目录 {out.name}')
 
 
 if __name__ == '__main__':

@@ -15,13 +15,16 @@
 1. [Weibo Crawler](tutorials/01_weibo_crawler.ipynb)：请求、解析与保存雷军微博。
 2. [User Behavior Analysis](tutorials/02_user_behavior_analysis.ipynb)：用户记录、内容、公开表达与城市比较；在相应步骤学习Pandas和绘图。
 3. [Big Data with DuckDB](tutorials/03_big_data_with_duckdb.ipynb)：直接查询Parquet、分组汇总与大数据处理。
+4. [Spatial Analysis and User Behavior](tutorials/04_spatial_user_behavior.ipynb)：矢量与栅格、空间连接、分级设色与用户位置观测。
+5. [Heatwave and User Expression](tutorials/05_heatwave_user_expression.ipynb)：热相关讨论、情感变化、城市差异与四川空间分布。
+6. [Spatial Big Data with DuckDB](tutorials/06_spatial_big_data_duckdb.ipynb)：空间SQL、全国网格、城市间观测联系与Lonboard。
 
 ## 按需查阅
 
 - [Pandas Analysis](tutorials/extent/02_pandas_analysis.ipynb)
 - [Plotting](tutorials/extent/03_plotting.ipynb)
 
-课堂依次打开01、02、03；extent中的两本教程供按需查阅，无需先完成。
+第一次下午依次打开01—03，第二次下午依次打开04—06；extent中的两本教程供按需查阅，无需先完成。
 
 ## 在本机运行
 
@@ -39,7 +42,7 @@ uv pip install --python .venv -r tutorials/requirements/requirements.txt
 
 用VS Code打开整个仓库，选择课程Conda环境或项目 `.venv` 内核。
 详细步骤见[环境与运行说明](tutorials/requirements/README.md)。完整加密包已包含
-`tutorials/data/posts_two_weeks.parquet`与同目录的 `posts_preview.csv`；公开源码下载不含数据。
+`tutorials/data/posts_two_weeks.parquet`与同目录的 `posts_preview.csv`，以及`data/spatial/`下的行政边界和天气缓存；公开源码下载不含这些数据。
 解压后的数据、小CSV和分析输出不提交到公开仓库。
 
 爬虫使用 `tutorials/assets/weibo_crawler/test.html` 练习HTML，登录 https://weibo.cn/

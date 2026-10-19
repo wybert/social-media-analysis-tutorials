@@ -1,7 +1,8 @@
 """公开下载入口与限期分享配置；不保存解压密码。"""
 REPOSITORY = 'wybert/social-media-analysis-tutorials'
 RELEASE_TAG = 'classroom-2026-10'
-ARCHIVE_NAME = 'social-media-analysis-classroom-2026-10-16.zip'
+MATERIAL_VERSION = '2026-10-19'
+ARCHIVE_NAME = f'social-media-analysis-classroom-{MATERIAL_VERSION}.zip'
 ARCHIVE_URL = f'https://github.com/{REPOSITORY}/releases/download/{RELEASE_TAG}/{ARCHIVE_NAME}'
 EXPIRES_AT = '2026-10-25T23:59:59+08:00'
 
@@ -33,11 +34,9 @@ jobs:
             echo 'The classroom sharing window is still open.'
             exit 0
           fi
-          asset=$(gh release view ''' + RELEASE_TAG + ''' --json assets --jq '.assets[] | select(.name == "''' + ARCHIVE_NAME + '''") | .name')
-          if [ -n "$asset" ]; then
-            gh release delete-asset ''' + RELEASE_TAG + ''' "$asset" --yes
-            echo 'Encrypted classroom download removed.'
-          else
-            echo 'No encrypted classroom asset remains.'
-          fi
+          # 清理同一课堂Release的新旧加密包及校验文件，避免旧入口继续提供数据。
+          gh release view ''' + RELEASE_TAG + ''' --json assets --jq '.assets[] | select(.name | startswith("social-media-analysis-classroom-")) | .name' > /tmp/classroom-assets.txt
+          while IFS= read -r asset; do
+            [ -z "$asset" ] || gh release delete-asset ''' + RELEASE_TAG + ''' "$asset" --yes
+          done < /tmp/classroom-assets.txt
 ''', encoding='utf-8')
