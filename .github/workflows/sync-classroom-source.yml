@@ -1,0 +1,33 @@
+name: Synchronize validated classroom source
+on:
+  workflow_dispatch:
+    inputs:
+      expected_head:
+        required: true
+        type: string
+permissions:
+  contents: write
+jobs:
+  synchronize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Verify and synchronize the reviewed source archive
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: wybert/social-media-analysis-tutorials
+          EXPECTED_HEAD: ${{ inputs.expected_head }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_HEAD"
+          mkdir -p "$RUNNER_TEMP/course-source"
+          gh release download classroom-2026-10 --pattern course-source-sync-2026-10-22.bundle --dir "$RUNNER_TEMP/course-source"
+          echo 'e53996a13d98626d3a5a99f7464778641a75ffe534cfb79690b9d15cf3b45d99  '"$RUNNER_TEMP/course-source/course-source-sync-2026-10-22.bundle" | sha256sum -c -
+          git bundle verify "$RUNNER_TEMP/course-source/course-source-sync-2026-10-22.bundle"
+          git fetch "$RUNNER_TEMP/course-source/course-source-sync-2026-10-22.bundle" HEAD
+          test "$(git rev-parse FETCH_HEAD)" = '2f5c7b5ea437af58f7eee17b8ec6302c085bcb9a'
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' -c commit.gpgsign=false cherry-pick FETCH_HEAD
+          git push origin HEAD:main
