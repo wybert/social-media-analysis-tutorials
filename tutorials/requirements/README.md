@@ -86,7 +86,7 @@ uv用户可运行`uv pip install --python .venv -r tutorials/requirements/requir
 
 教程按跨平台方式编写。当前运行验证在macOS的课程Conda环境完成，尚未做Windows实机整本运行验证；Windows同学应使用同一份环境配置、数据与目录结构。
 
-## 7. 第二次下午：04—06时空分析
+## 7. 第二次课：04—06时空分析
 
 依次打开`04_spatial_user_behavior.ipynb`、`05_heatwave_user_expression.ipynb`和`06_spatial_big_data_duckdb.ipynb`，每本可从空内核独立运行，继续读取`tutorials/data/posts_two_weeks.parquet`。05另用`data/spatial/chengdu_weather_20220812_25.csv`的14行真实ERA5缓存；课堂不实时请求天气数据。
 
@@ -94,7 +94,13 @@ uv用户可运行`uv pip install --python .venv -r tutorials/requirements/requir
 
 06首次执行`INSTALL spatial`需要网络，以获取与当前DuckDB匹配的扩展；`LOAD spatial`对每个新连接执行。Lonboard使用Jupyter Widget/WebGL，在VS Code安装Jupyter扩展并运行对应代码格；缺少Widget显示时先核对课程内核、重启内核并重新运行，不能仅根据静态网页判断Widget运行情况。
 
-04使用GeoPandas的`plot()`绘制静态地图，Plotly展示交互式点线与高德瓦片；05使用GeoPlot、Cartopy绘制行政区和KDE静态图；06使用Lonboard的网格面、比例圆点和城市联系弧线。地图展示0.02度格子边界，另比较0.04度合并结果，颜色表示每格记录数。
+06的H3拓展另需执行`INSTALL h3 FROM community; LOAD h3;`。这是DuckDB社区扩展，不需要另装Python的`h3`包。请课前在课程内核中运行该单元，下载与当前DuckDB版本及操作系统匹配的扩展；下载后可使用本机缓存。更换机器或DuckDB版本后需要重新安装。Conda与uv环境使用相同SQL命令。H3计算使用近似转换后的WGS84坐标，显示副本再转回GCJ-02，不能直接把原GCJ-02数值交给H3。
+
+06的全国情感分析使用随数据提供的模型分数，不需下载新的情感模型；城市聚类使用已包含的scikit-learn，讨论画像热图与分数比较使用已包含的Plotly。
+
+全国省、市边界已缓存，无需课堂联网下载。06的分析单元对照使用同一批成功归属城市边界的有效位置记录，在一张Plotly交互地图上用按钮切换省级、城市级与H3的5、6、7级，另提供全国、四川、成都的快速定位按钮。使用环境中已有的Plotly，不需新增依赖。先运行前面的边界归属、词表标签和H3单元，再运行对照部分；切换单元仅改变图层可见性，保留当前地图视野和固定色阶，可放大到同一区域比较，并悬停查看统计值。运行生成图表后，按钮由浏览器处理，不依赖Python回调。细H3网格预加载的数据较多，首次显示与切换速度取决于电脑和浏览器；高德底图仍需联网。
+
+04使用GeoPandas的`plot()`绘制静态地图，Plotly展示交互式点线与高德瓦片；05使用GeoPlot、Cartopy绘制行政区和KDE静态图。06的6.4、6.6和6.7城市聚类地图使用静态图，6.5分别提供全国、四川及周边的数量／比例并排图，均叠加缓存的省界与省名；格网只填色，不绘制描边。热力图、6.8的H3地图和6.9的分析单元对照仍保留交互，城市联系弧线由Lonboard绘制。静态绘图使用环境中已有的GeoPandas与Matplotlib，无需新增依赖。
 
 示例通过高德栅格瓦片读取底图，不调用高德JS API，因此不需要填写JS API Key。在线底图仍需要网络；统计计算与静态图可离线完成。分级设色使用的mapclassify、05使用的GeoPlot与Cartopy、度量转换使用的xyconvert均已写入依赖配置；xyconvert为纯Python/NumPy包，通过环境配置中的pip段安装。
 

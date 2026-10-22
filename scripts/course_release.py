@@ -1,7 +1,7 @@
 """公开下载入口与限期分享配置；不保存解压密码。"""
 REPOSITORY = 'wybert/social-media-analysis-tutorials'
 RELEASE_TAG = 'classroom-2026-10'
-MATERIAL_VERSION = '2026-10-19'
+MATERIAL_VERSION = '2026-10-22'
 ARCHIVE_NAME = f'social-media-analysis-classroom-{MATERIAL_VERSION}.zip'
 ARCHIVE_URL = f'https://github.com/{REPOSITORY}/releases/download/{RELEASE_TAG}/{ARCHIVE_NAME}'
 EXPIRES_AT = '2026-10-25T23:59:59+08:00'

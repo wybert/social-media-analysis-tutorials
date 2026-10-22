@@ -17,14 +17,14 @@
 3. [Big Data with DuckDB](tutorials/03_big_data_with_duckdb.ipynb)：直接查询Parquet、分组汇总与大数据处理。
 4. [Spatial Analysis and User Behavior](tutorials/04_spatial_user_behavior.ipynb)：矢量与栅格、空间连接、分级设色与用户位置观测。
 5. [Heatwave and User Expression](tutorials/05_heatwave_user_expression.ipynb)：热相关讨论、情感变化、城市差异与四川空间分布。
-6. [Spatial Big Data with DuckDB](tutorials/06_spatial_big_data_duckdb.ipynb)：空间SQL、全国网格、城市间观测联系与Lonboard。
+6. [Spatial Big Data with DuckDB](tutorials/06_spatial_big_data_duckdb.ipynb)：空间SQL、全国讨论与情感、城市画像及省市与H3尺度对照；城市间观测联系为扩展。
 
 ## 按需查阅
 
 - [Pandas Analysis](tutorials/extent/02_pandas_analysis.ipynb)
 - [Plotting](tutorials/extent/03_plotting.ipynb)
 
-第一次下午依次打开01—03，第二次下午依次打开04—06；extent中的两本教程供按需查阅，无需先完成。
+第一次课依次打开01—03，第二次课依次打开04—06；extent中的两本教程供按需查阅，无需先完成。
 
 ## 在本机运行
 

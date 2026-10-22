@@ -22,7 +22,7 @@ TITLES = {
     '03_big_data_with_duckdb': ('Big Data with DuckDB', '第3节：直接查询Parquet、汇总后绘图、查询计划与多核'),
     '04_spatial_user_behavior': ('Spatial Analysis and User Behavior', '第4节：矢量与栅格、空间连接、分级设色与用户位置观测'),
     '05_heatwave_user_expression': ('Heatwave and User Expression', '第5节：热相关讨论、情感变化、城市差异与四川空间分布'),
-    '06_spatial_big_data_duckdb': ('Spatial Big Data with DuckDB', '第6节：空间SQL、全国网格汇总、城市间观测联系与Lonboard'),
+    '06_spatial_big_data_duckdb': ('Spatial Big Data with DuckDB', '第6节：空间SQL、全国讨论与情感、城市画像及省市与H3尺度对照；城市间观测联系为扩展'),
 }
 
 MAIN_LESSONS = ('01_weibo_crawler', '02_user_behavior_analysis', '03_big_data_with_duckdb',

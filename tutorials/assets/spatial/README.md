@@ -1,6 +1,8 @@
 # 高德栅格底图
 
-`gaode_style.json`是MapLibre样式，包含一个高德栅格瓦片源和一个raster图层，保留“高德地图”署名。Lonboard的MaplibreBasemap通过HTTP(S)样式URL读取它；Plotly也可直接使用同一瓦片URL。
+06使用Lonboard的`BitmapTileLayer`直接读取高德栅格瓦片，把瓦片放在数据图层下方；Plotly也使用同一高德瓦片地址。地图加载不依赖课程GitHub Pages提供的样式文件，保留“高德地图”署名。
+
+`gaode_style.json`展示同一瓦片地址的MapLibre配置格式，包含一个栅格源和一个raster图层；当前06和底图测试Notebook不读取此文件。
 
 示例瓦片接口与高德JS API不同，当前不要求在代码格填写JS API Key。瓦片服务需要联网，地址及服务规则以提供方为准。
 
@@ -11,6 +13,6 @@
 GCJ-02原始/显示几何的CRS留空，因此Lonboard可能提示无CRS；这与已明确声明来源的GCJ-02显示相符。行政边界缓存在`data/spatial/boundaries/`，与底图样式文件分别管理。
 
 [Plotly自定义瓦片](https://plotly.com/python/tile-map-layers/)
-[Lonboard底图](https://developmentseed.org/lonboard/latest/api/basemap/)
+[Lonboard栅格瓦片图层](https://developmentseed.org/lonboard/latest/api/layers/bitmap-tile-layer/)
 [MapLibre栅格源](https://maplibre.org/maplibre-style-spec/sources/#raster)
 [xyconvert](https://github.com/cyang-kth/xyconvert)

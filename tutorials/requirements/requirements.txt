@@ -22,6 +22,7 @@ requests>=2.31,<3
 beautifulsoup4>=4.12,<5
 python-dotenv>=1.2,<2
 pyarrow>=15
+# 06的H3扩展在SQL中INSTALL h3 FROM community，不需另装Python h3包。
 duckdb>=1.4,<1.5
 jupysql>=0.11,<0.12
 duckdb-engine>=0.17,<0.18
